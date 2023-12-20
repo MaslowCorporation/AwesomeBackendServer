@@ -1,4 +1,4 @@
-# AwesomeBackendServer
+# AwesomeBackendServer 🌎
 
 Le serveur permettant de fournir les services d'I.A. , et autres joyeuseries monétisées, au public !
 
