@@ -6,7 +6,9 @@ export async function _webhookEndpoint(req, res, stripe) {
   let eventType;
 
   // Check if webhook signing is configured.
+  // local test webhook
   const webhookSecret = "<webhookSecret>";
+
 
   if (webhookSecret) {
     // Retrieve the event by verifying the signature using the raw body and secret.

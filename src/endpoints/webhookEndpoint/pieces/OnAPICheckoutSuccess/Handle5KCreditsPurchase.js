@@ -1,6 +1,6 @@
-import { CreateFirestoreDocument, GetFirestoreDocument, UpdateFirestoreDocument } from "../../../../services/FirestoreCRUD/FirebaseCRUD.js";
-import { generateAPIKey } from "../../../../services/GenerateAPIKey/GenerateAPIKey.js";
-import { SendEmail } from "../../../../services/SendEmail/SendEmail.js";
+import { GetFirestoreDocument, UpdateFirestoreDocument } from "../../../../services/FirestoreCRUD/FirebaseCRUD.js";
+import { GetDatabaseDocument, UpdateDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
+
 
 /**
  *
@@ -11,7 +11,7 @@ import { SendEmail } from "../../../../services/SendEmail/SendEmail.js";
  *
  */
 export async function Handle5KCreditsPurchase(checkoutSession) {
-    // debugger;
+    
 
     // the hashed API key of the beautiful soul who just bought 
     // 5000 API Credits
@@ -26,7 +26,9 @@ export async function Handle5KCreditsPurchase(checkoutSession) {
         collectionName: "APIKeys",
     });
 
-    // store the customer id in your database
+    
+
+    // store the customer id in your Firestore database
     await UpdateFirestoreDocument({
         documentId: hashedAPIKey,
         collectionName: "APIKeys",
@@ -37,7 +39,6 @@ export async function Handle5KCreditsPurchase(checkoutSession) {
             APICredits: customerData.APICredits + 5000
         },
     });
-
 
     return;
 }

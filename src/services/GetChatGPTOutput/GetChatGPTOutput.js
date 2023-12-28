@@ -1,57 +1,59 @@
-import I18n from "i18n-js";
 
-import { Configuration, OpenAIApi } from "openai";
-import { Constants } from "../../AppConstants/Constants.js";
 import { GetPromptTokensLength } from "../GetPromptTokensLength/GetPromptTokensLength.js";
+
+import i18next from "i18next";
+
+import OpenAI from 'openai';
+
+import { Constants } from "../../AppConstants/Constants.js";
 
 async function GetChatGPTOutput({
   model_chosen,
   prompt,
   onSuccess,
   onError,
+  onProgress,
   apiKey,
   params,
-  print = true,
+  print = false,
 }) {
   try {
-    const configuration = new Configuration({
-      apiKey: apiKey,
-    });
-    const openai = new OpenAIApi(configuration);
-
     const model_max_tok = Constants.modelsMaxTokens[model_chosen];
 
-    const prompt_token_length = GetPromptTokensLength(prompt);
+    const prompt_token_length = GetPromptTokensLength(model_chosen, prompt);
     const availableTokens = model_max_tok - prompt_token_length - 100;
 
-    print ? console.log(I18n.t("xnPkyJUf") + ` ${model_chosen}`) : 42;
-    print
-      ? console.log(
-          I18n.t("xJLDlRfb") +
-            ` ${!isNaN(availableTokens) ? availableTokens : "..."}`
-        )
-      : 42;
+    print && console.log(i18next.t("xnPkyJUf") + ` ${model_chosen}`);
+    print && console.log(
+      i18next.t("xJLDlRfb") +
+      ` ${!isNaN(availableTokens) ? availableTokens : "..."}`
+    );
 
-    const outputText = await GetTextFromCompletion({
-      openai,
+
+
+    const outputData = await GetTextFromCompletion({
+      apiKey,
       model_chosen,
       availableTokens,
       prompt,
       params,
+      onProgress,
+      print,
     });
 
-    if (outputText?.length > 0) {
-      onSuccess ? onSuccess(outputText) : 42;
 
-      return outputText;
-    } else {
-      throw new Error(`GPT completion Request failed`);
-    }
+
+    onSuccess && onSuccess(outputData);
+
+    return outputData;
+
   } catch (error) {
+
+
     if (error.response) {
-      onError != null ? onError(error.response.data) : 42;
+      onError && onError(error.response.data);
     } else {
-      onError != null ? onError(error.message) : 42;
+      onError && onError(error.message);
     }
 
     return null;
@@ -59,72 +61,133 @@ async function GetChatGPTOutput({
 }
 
 async function GetTextFromCompletion({
-  openai,
+  apiKey,
   model_chosen,
   availableTokens,
   prompt,
   params,
+  print,
+  onProgress,
 }) {
   if (Constants.completionModels.includes(model_chosen)) {
-    return GetTextFromTextCompletion({
-      openai,
+    return GetCompletion({
       model_chosen,
-      availableTokens,
       prompt,
-      params,
+      onProgress,
+      print,
+      apiKey,
+      availableTokens,
     });
   } else if (Constants.chatModels.includes(model_chosen)) {
-    return GetTextFromChatCompletion({
-      openai,
+    return GetChatCompletion({
       model_chosen,
-      availableTokens,
       prompt,
-      params,
+      onProgress,
+      print,
+      apiKey,
+      availableTokens,
     });
   } else {
     return null;
   }
 }
 
-async function GetTextFromChatCompletion({
-  openai,
+async function GetChatCompletion({
   model_chosen,
-  availableTokens,
   prompt,
+  onProgress,
+  print = false,
+  apiKey,
   params,
+  availableTokens,
 }) {
-  const completion = await openai.createChatCompletion({
-    model: model_chosen,
-    max_tokens: availableTokens,
-    messages: [{ role: "user", content: prompt }],
-    ...params,
+  let result = "";
+  const inputTokens = GetPromptTokensLength(model_chosen, prompt);
+
+
+
+  // Print model information if enabled
+  print && console.log(`Model chosen: ${model_chosen}`);
+
+  const openai = new OpenAI({
+    apiKey,
   });
 
-  const outputText = completion?.data?.choices[0]?.message?.content;
-
-  return outputText;
-}
-
-async function GetTextFromTextCompletion({
-  openai,
-  model_chosen,
-  availableTokens,
-  prompt,
-  params,
-}) {
-  const completion = await openai.createCompletion({
-    // https://platform.openai.com/docs/models/overview
+  // Create a chat-based completion request
+  const stream = await openai.chat.completions.create({
     model: model_chosen,
     max_tokens: availableTokens,
-
-    prompt: prompt,
-
-    ...params,
+    messages: [{ role: 'user', content: prompt }],
+    stream: true,
   });
 
-  const outputText = completion?.data?.choices[0]?.text;
 
-  return outputText;
+
+  for await (const chunk of stream) {
+    const chunkData = chunk.choices[0]?.delta?.content || '';
+
+    result += chunkData;
+
+    onProgress && onProgress({ chunk: chunkData, inputTokens })
+  }
+
+
+
+  const outputTokens = GetPromptTokensLength(model_chosen, result);
+
+  print && console.log(`Chat Completion Answer: ${result}`);
+
+  return { result, inputTokens, outputTokens }
+
+
 }
+
+async function GetCompletion({
+  model_chosen,
+  prompt,
+  onProgress,
+  print = false,
+  apiKey,
+  params,
+  availableTokens,
+}) {
+  let result = "";
+  const inputTokens = GetPromptTokensLength(model_chosen, prompt);
+
+  // Print model information if enabled
+  print && console.log(`Model chosen: ${model_chosen}`);
+
+  const openai = new OpenAI({
+    apiKey,
+  });
+
+
+
+  // Create a chat-based completion request
+  const stream = await openai.completions.create({
+    model: model_chosen,
+    max_tokens: availableTokens,
+    prompt,
+    stream: true,
+  });
+
+  for await (const chunk of stream) {
+    const chunkData = chunk.choices[0]?.delta?.content || '';
+
+    result += chunkData;
+
+    onProgress && onProgress({ chunk: chunkData, inputTokens })
+  }
+
+
+
+  const outputTokens = GetPromptTokensLength(model_chosen, result);
+
+  print && console.log(`Completion Answer: ${result}`);
+
+  return { result, inputTokens, outputTokens };
+}
+
 
 export { GetChatGPTOutput };
+

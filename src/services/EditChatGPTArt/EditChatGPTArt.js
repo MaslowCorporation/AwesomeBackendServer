@@ -7,6 +7,7 @@ import { MaskPhotoPieces } from "../MaskPhotoPieces/MaskPhotoPieces.js";
 import { GetPhotoDimensions } from "../GetPhotoDimensions/GetPhotoDimensions.js";
 import { DeletePhotoGarbage } from "./pieces/DeletePhotoGarbage.js";
 */
+
 // Use the fs module here
 
 async function EditChatGPTArt({
@@ -20,8 +21,7 @@ async function EditChatGPTArt({
   params,
   print = true,
 }) {
-  /*
-  try {
+  /*try {
     let image_url;
 
     if (model_chosen == "dall-e-2") {
@@ -49,11 +49,11 @@ async function EditChatGPTArt({
     }
 
     return null;
-  }*/
+  }
 }
 
 async function EditArtUsingDallE({ apiKey, prompt, params, filePath, req }) {
-  /*let transparentPhotoPath, defaultTransparentPhotoPath, cheesePhotoPath;
+  let transparentPhotoPath, defaultTransparentPhotoPath, cheesePhotoPath;
 
   try {
     const configuration = new Configuration({

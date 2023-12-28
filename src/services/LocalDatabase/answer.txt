@@ -1,0 +1,27 @@
+Here are the methods to get all the database documents and to delete all database documents:
+
+```javascript
+// Get all documents
+export async function GetAllDatabaseDocuments({ db, tableName }) {
+  try {
+    let statement = await db.all(`SELECT * FROM ${tableName}`);
+    return statement;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+// Delete all documents
+export async function DeleteAllDatabaseDocuments({ db, tableName }) {
+  try {
+    let statement = await db.run(`DELETE FROM ${tableName}`);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+```
+
+The `GetAllDatabaseDocuments` function retrieves all records from the given table. The `DeleteAllDatabaseDocuments` function removes all records from the given table. It returns true on successful execution. In both cases, errors are logged to the console and the functions return null if an error occurs.

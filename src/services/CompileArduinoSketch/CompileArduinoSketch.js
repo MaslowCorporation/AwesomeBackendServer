@@ -4,6 +4,7 @@
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { GetFileContentsIfExisting } from '../GetFileContentsIfExisting/GetFileContentsIfExisting.js';
 
 // Function to compile the Arduino source code
 /**
@@ -15,6 +16,17 @@ import path from 'path';
  * @param {String} outputFolder - The folder that will contain the compiled. files.
  * @param {Function} onSuccess - Callback that takes the generated .hex source code string as an argument.
  * @param {Function} onError - Callback that takes any eventual error during compilation as an argument.
+ * 
+ * For this to work on a server, you must install arduino-cli: 
+ * 
+ * https://arduino.github.io/arduino-cli/0.35/installation/
+ * 
+ * Then run this command to install avr stuff
+ * 
+ * arduino-cli core install arduino:avr
+ * 
+ * And it should work !
+ * 
  */
 export async function CompileArduinoSketch({
     code_string,
@@ -69,13 +81,13 @@ export async function CompileArduinoSketch({
 
                         try {
                             // Read the compiled .hex file data
-                            const hexFileData = fs.readFileSync(hexFilePath, 'utf8');
-                            const hexBootFileData = fs.readFileSync(hexBootFilePath, 'utf8');
+                            const hexFileData = GetFileContentsIfExisting(hexFilePath);
+                            const hexBootFileData = GetFileContentsIfExisting(hexBootFilePath);
 
 
                             // Delete the input and output directories
-                            fs.rmdirSync(inputFolder, { recursive: true, force: true }); // Delete the source code folder
-                            fs.rmdirSync(outputFolder, { recursive: true, force: true }); // Delete the output files folder
+                            fs.rmSync(inputFolder, { recursive: true, force: true }); // Delete the source code folder
+                            fs.rmSync(outputFolder, { recursive: true, force: true }); // Delete the output files folder
 
 
 

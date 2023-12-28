@@ -7,7 +7,7 @@ export function checkoutCreditsEndpoint(app, stripe, qtyCredits) {
   app.post(`/checkout${qtyCredits}`, async (req, res) => {
     // démarre le checkout (paiement via CB, via url de stripe)
     try {
-      // debugger;
+      // 
 
       await _checkoutCreditsEndpoint(stripe, req, res, qtyCredits);
 

@@ -1,5 +1,8 @@
+import { Constants } from "../../../../AppConstants/Constants.js";
 import { CreateFirestoreDocument } from "../../../../services/FirestoreCRUD/FirebaseCRUD.js";
 import { generateAPIKey } from "../../../../services/GenerateAPIKey/GenerateAPIKey.js";
+import { CreateDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
+
 import { SendEmail } from "../../../../services/SendEmail/SendEmail.js";
 
 /**
@@ -36,8 +39,8 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
     console.log(`User's API Key: ${apiKey}`);
     console.log(`User's Hashed API Key: ${hashedAPIKey}`);
 
-    // Store the hashed API key in your database of users API Keys
-    // so the user can do requests without missing API key errors
+    // Store the hashed API key in your Firestore database of users API Keys
+    // so the data is safe in the cloud
     await CreateFirestoreDocument({
         documentId: hashedAPIKey,
         collectionName: "APIKeys",
@@ -63,12 +66,14 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
         },
     });
 
-    /*
     await SendEmail({
-        serverToken: "<PostmarkServerToken>",
-        senderEmail: "<YOUR_PRIVATE_EMAIL>",
-        receiverEmail: customerEmail,
-        subject: "maslow-gpt-api-v2 Subscription !",
+        emailType: "private",
+        host: 'mail.privateemail.com',
+        port: 465,
+        fromEmail: "<YOUR_PRIVATE_EMAIL>",
+        fromEmailPwd: "<YOUR_PRIVATE_EMAIL_PWD>",
+        toEmail: customerEmail,
+        subject: "your-api-name API Subscription !",
         text: `
 Hello, Citizen of the future,
 
@@ -80,10 +85,16 @@ Please keep this API key secret.
 
 Thank You Sir. You can achieve anything you put your mind to.
 
-The maslow-gpt-api-v2 corporation.
-`
+The your-api-name corporation.
+`,
+        onSuccess: (info) => {
+            console.log(`Email sent to ${customerEmail}`);
+        },
+        onError: (error) => {
+            console.error(`Error occurred while sending email: ${error.message}`);
+        },
     });
-    */
+
 
     return;
 }

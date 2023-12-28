@@ -1,5 +1,5 @@
 export async function _checkoutEndpoint(stripe, req, res) {
-  // debugger;
+  // 
 
   const { accessToken, idToken, firebase_uid, email, username, username_photo } = req.body;
 

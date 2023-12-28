@@ -13,7 +13,7 @@ import { HandleAPISubscription } from "./HandleAPISubscription.js";
  */
 export async function OnAPICheckoutSuccess(data, stripe) {
 
-  // debugger;
+  // 
 
   // This checkout session object contains 
   // the data generated after the successful checkout

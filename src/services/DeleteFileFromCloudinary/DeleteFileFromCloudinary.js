@@ -1,5 +1,7 @@
 import cloudinary from "cloudinary";
 import { RunIfPossible } from "../RunIfPossible/RunIfPossible.js";
+import { InitCloudinary } from "../UploadFileToCloudinary/InitCloudinary.js";
+import { Constants } from "../../AppConstants/Constants.js";
 
 async function DeleteFileFromCloudinary({
   publicId,
@@ -8,7 +10,11 @@ async function DeleteFileFromCloudinary({
   onError,
 }) {
   try {
-    // debugger;
+    InitCloudinary({
+      cloud_name: Constants.cloudinary_cloud_name,
+      api_key: Constants.cloudinary_api_key,
+      api_secret: Constants.cloudinary_api_secret
+    });
 
     const response = await cloudinary.v2.uploader.destroy(publicId, {
       resource_type: resourceType,

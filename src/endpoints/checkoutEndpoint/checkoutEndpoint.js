@@ -9,7 +9,7 @@ export function checkoutEndpoint(app, stripe) {
   app.post("/checkout", async (req, res) => {
     // démarre le checkout (paiement via CB, via url de stripe)
     try {
-      // debugger;
+      // 
 
       await _checkoutEndpoint(stripe, req, res);
 

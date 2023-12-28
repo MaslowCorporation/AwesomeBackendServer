@@ -1,5 +1,7 @@
 import { RunIfPossible } from "../RunIfPossible/RunIfPossible.js";
 import cloudinary from "cloudinary";
+import { InitCloudinary } from "../UploadFileToCloudinary/InitCloudinary.js";
+import { Constants } from "../../AppConstants/Constants.js";
 
 
 /**
@@ -35,9 +37,7 @@ import cloudinary from "cloudinary";
  * 
  */
 export async function TransformCloudFile({
-    cloudName,
     publicId,
-    apiKey,
     assetType,
     transformations,
     deliveryType = 'upload',
@@ -48,7 +48,7 @@ export async function TransformCloudFile({
     fileExtension
 }) {
     try {
-        // debugger;
+        // 
 
         /* Array of Object transformations
         let result = await cloudinary.v2.url(publicId, {
@@ -58,7 +58,14 @@ export async function TransformCloudFile({
         });
         */
 
+        InitCloudinary({
+            cloud_name: Constants.cloudinary_cloud_name,
+            api_key: Constants.cloudinary_api_key,
+            api_secret: Constants.cloudinary_api_secret
+        });
+
         const versionOrNone = version ? '/' + version : "";
+        const cloudName =  Constants.cloudinary_cloud_name;
 
         let result = `https://res.cloudinary.com/${cloudName}/${assetType}/${deliveryType}/${transformations}${versionOrNone}/${publicId}.${fileExtension}`;
 

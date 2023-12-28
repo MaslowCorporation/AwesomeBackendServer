@@ -1,28 +1,44 @@
-import 'dotenv/config'
+
+
+
+// Utilities and stuff
+import { config } from "dotenv";
+
+config();
 
 import express from "express";
 import stripe from "stripe";
 
 import { FormatRequestBodies } from "./src/services/FormatRequestBodies/FormatRequestBodies.js";
+import { startServer } from "./src/services/StartServer/StartServer.js";
+import { InitAppStrings } from "./src/stringRepos/AppStrings/AppStrings.js";
+import { HTTPSRedirect } from './src/services/HTTPSRedirect/HTTPSRedirect.js';
+import { InitRateLimiter } from './src/services/InitRateLimiter/InitRateLimiter.js';
+
+// Starterpack API endpoints
 import { myAPIEndpoint } from "./src/endpoints/myAPIEndpoint/myAPIEndpoint.js";
 import { checkoutEndpoint } from "./src/endpoints/checkoutEndpoint/checkoutEndpoint.js";
 import { webhookEndpoint } from "./src/endpoints/webhookEndpoint/webhookEndpoint.js";
 import { checkoutCreditsEndpoint } from './src/endpoints/checkoutCreditsEndpoint/checkoutCreditsEndpoint.js';
-
-import { startServer } from "./src/services/StartServer/StartServer.js";
-
-
-/* PLOP_INJECT_IMPORT */
-import { AppStrings } from "./src/stringRepos/AppStrings/AppStrings.js";
-import { InitCloudinary } from './src/services/UploadFileToCloudinary/InitCloudinary.js';
-import { Constants } from './src/AppConstants/Constants.js';
-import { HTTPSRedirect } from './src/services/HTTPSRedirect/HTTPSRedirect.js';
+import { update_work_dataEndpoint } from "./src/endpoints/update_work_dataEndpoint/update_work_dataEndpoint.js";
+import { get_work_statusEndpoint } from "./src/endpoints/get_work_statusEndpoint/get_work_statusEndpoint.js";
 import { get_api_client_infoEndpoint } from "./src/endpoints/get_api_client_infoEndpoint/get_api_client_infoEndpoint.js";
+
+
+
+// The imports for Your own endpoints that you created using the command:
+// npx maslow add-api-endpoint
+// DON'T TOUCH the comment below !!!
+/* PLOP_INJECT_IMPORT */
+
+
+
+
 
 /**
  * OYé OYé CITOYENS !!
  *
- * Cette humble API nommée maslow-gpt-api,
+ * Cette humble API nommée maslow-gpt-api-v2,
  * à été construite avec l'aide de:
  *
  * https://www.youtube.com/watch?v=MbqSMgMAzxU
@@ -36,10 +52,14 @@ export const apiPort = 8080;
 // pour notre sainte API
 export const app = express();
 
+
+// initialize the rate limiter
+InitRateLimiter(app);
+
 /**
  * 
  * Uncomment this code if you want to monetize your API with Stripe
-
+ *
 // le secret key du compte stripe, dispo sections
 // developers du dashboard stripe
 // https://dashboard.stripe.com/test/apikeys
@@ -48,11 +68,10 @@ const stripe_secret_key = "<STRIPE_SECRET_KEY>";
 // initialse l'instance de stripe,
 // nécessaire pour pouvoir effectuer des requetes payantes
 const stripeInstance = new stripe(stripe_secret_key);
-
 */
 
 // init de strings intl
-AppStrings();
+InitAppStrings();
 
 // serve des fichiers html, for ze world
 app.use(express.static('public'));
@@ -62,17 +81,8 @@ app.use(express.static('public'));
  * if you want automatic 
  * https redirection for all incoming API requests
  */
-//HTTPSRedirect(app);
+HTTPSRedirect(app);
 
-/** 
- * Uncomment this code if you want to use Cloudinary 
- *
-InitCloudinary({
-  cloud_name: Constants.cloudinary_cloud_name,
-  api_key: Constants.cloudinary_api_key,
-  api_secret: Constants.cloudinary_api_secret
-});
-*/
 
 /**
  * 
@@ -86,12 +96,18 @@ InitCloudinary({
 FormatRequestBodies(app, express);
 
 
-
+// Your own endpoints that you created using the command:
+// npx maslow add-api-endpoint
+// DON'T TOUCH the comment below !!!
 /* PLOP_INJECT_ENDPOINT_INIT */
 
 
 
 /** 
+ * 
+ * Below are all the default endpoints of your server.
+ * 
+ * The endpoints for monetization, background work handling, etc...
  * 
  * Uncomment the 
  * 
@@ -128,6 +144,9 @@ FormatRequestBodies(app, express);
 // reachable via http://localhost:<apiPort>/checkout<QTY_CREDITS>
 //checkoutCreditsEndpoint(app, stripeInstance, 5000);
 
+// crée un endpoint nommé get_api_client_info
+// reachable via http://localhost:<apiPort>/get_api_client_info
+get_api_client_infoEndpoint(app);
 
 // this is a dummy GET API endpoint for testing purposes.
 // crée un endpoint nommé myAPI (GET)
@@ -135,9 +154,15 @@ FormatRequestBodies(app, express);
 // delete or comment this myAPIEndpoint(app); line when in production 
 myAPIEndpoint(app);
 
-// crée un endpoint nommé get_api_client_info
-// reachable via http://localhost:<apiPort>/get_api_client_info
-get_api_client_infoEndpoint(app, stripeInstance);
+// crée un endpoint nommé update_work_data
+// reachable via http://localhost:<apiPort>/update_work_data
+update_work_dataEndpoint(app);
+
+// crée un endpoint nommé get_work_status
+// reachable via http://localhost:<apiPort>/get_work_status
+get_work_statusEndpoint(app);
 
 // exécute l'appli express
 startServer(app);
+
+

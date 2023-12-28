@@ -1,8 +1,13 @@
+import { Constants } from "../../../../AppConstants/Constants.js";
 import { GetFirestoreDocument } from "../../../../services/FirestoreCRUD/FirebaseCRUD.js";
 import { hashAPIKey } from "../../../../services/GenerateAPIKey/GenerateAPIKey.js";
+import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
+
 
 export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
-  // debugger;
+  // 
+
+
 
   // la clé API présente dans l'URL de requête
   const { apiKey } = req.query;
@@ -27,8 +32,8 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
 
   // get the API client data, from his Hashed API Key
   const APIClientData = await GetFirestoreDocument({
-    documentId: hashedAPIKey,
     collectionName: "APIKeys",
+    documentId: hashedAPIKey,
   });
 
 
@@ -55,8 +60,7 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
 
     const { accessToken, idToken, firebase_uid, email, username, username_photo } = req.body;
 
-    // more info here:
-    // 
+    // more info here: 
     // https://stripe.com/docs/api/checkout/sessions/create?lang=node
     const session = await stripe.checkout.sessions.create({
 

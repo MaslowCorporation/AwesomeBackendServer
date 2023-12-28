@@ -1,4 +1,4 @@
-import I18n from "i18n-js";
+import i18next from 'i18next';
 
 /* PLOP_IMPORT_GetQtyKeysInObj */
 import GetQtyKeysInObj from "../GetQtyKeysInObj/GetQtyKeysInObj.js";
@@ -70,13 +70,13 @@ async function TranslateObject({
   let currentIndex = 1;
   let retriesCount = 1;
   let totalStrings = GetQtyKeysInObj(obj);
-  doPrint ? console.log(I18n.t("x7CTz5XP")) : 42;
+  doPrint ? console.log(i18next.t("x7CTz5XP")) : 42;
 
   try {
     for (var key in obj) {
       doPrint
         ? console.log(
-          `\n(${currentIndex}/${totalStrings}):\n\n${I18n.t("xWtfTMu")}`
+          `\n(${currentIndex}/${totalStrings}):\n\n${i18next.t("xWtfTMu")}`
         )
         : 42;
 
@@ -89,7 +89,7 @@ async function TranslateObject({
 
       while (retriesCount <= retries && !translatedText) {
         doPrint
-          ? console.log(I18n.t("x8H4nyVx") + ` ${retriesCount}/${retries}`)
+          ? console.log(i18next.t("x8H4nyVx") + ` ${retriesCount}/${retries}`)
           : 42;
 
         translatedText = await TranslateText({
@@ -113,7 +113,7 @@ async function TranslateObject({
 
       currentIndex++;
 
-      doPrint ? console.log(`✅ ` + I18n.t("xlqZy0Sf")) : 42;
+      doPrint ? console.log(`✅ ` + i18next.t("xlqZy0Sf")) : 42;
     }
 
     RunIfPossible({ func: onSuccess, args: newObj });

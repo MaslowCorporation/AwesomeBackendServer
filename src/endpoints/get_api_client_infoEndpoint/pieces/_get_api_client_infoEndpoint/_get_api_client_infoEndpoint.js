@@ -1,9 +1,12 @@
 import { GetFirestoreDocument } from "../../../../services/FirestoreCRUD/FirebaseCRUD.js";
 import { hashAPIKey } from "../../../../services/GenerateAPIKey/GenerateAPIKey.js";
+import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
+
 import { DoTheAPIWork } from "../DoTheAPIWork/DoTheAPIWork.js";
 import { UpdateAPIUsage } from "../UpdateAPIUsage/UpdateAPIUsage.js";
+import { Constants } from "../../../../AppConstants/Constants.js";
 
-export async function _get_api_client_infoEndpoint(req, res, stripe) {
+export async function _get_api_client_infoEndpoint(req, res) {
 
   // la clé API présente dans l'URL de requête
   const { apiKey } = req.query;
@@ -28,8 +31,8 @@ export async function _get_api_client_infoEndpoint(req, res, stripe) {
 
   // get the API client data, from his Hashed API Key
   const APIClientData = await GetFirestoreDocument({
-    documentId: hashedAPIKey,
     collectionName: "APIKeys",
+    documentId: hashedAPIKey,
   });
 
 

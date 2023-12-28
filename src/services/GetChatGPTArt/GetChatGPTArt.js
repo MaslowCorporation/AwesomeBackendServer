@@ -1,8 +1,9 @@
-import I18n from "i18n-js";
+import i18next from 'i18next';
 
-import { Configuration, OpenAIApi } from "openai";
 import { Constants } from "../../AppConstants/Constants.js";
 import { GetPromptTokensLength } from "../GetPromptTokensLength/GetPromptTokensLength.js";
+import OpenAI from 'openai';
+
 
 async function GetChatGPTArt({
   model_chosen = "dall-e-2",
@@ -10,24 +11,28 @@ async function GetChatGPTArt({
   onSuccess,
   onError,
   apiKey,
-  params,
+  img_width,
+  img_height,
   print = true,
 }) {
   try {
     let image_url;
 
     if (model_chosen == "dall-e-2") {
-      image_url = await GetArtFromDallE(apiKey, prompt, params);
-    }
+      image_url = await GetArtFromDallE(apiKey, prompt, model_chosen, img_width, img_height);
+    } 
 
     if (image_url) {
       onSuccess ? onSuccess(image_url) : 42;
 
       return image_url;
-    } else {
-      throw new Error(`GPT Art Request failed`);
     }
+      
+    throw new Error(`GPT Art Request failed`);
+    
   } catch (error) {
+    
+    
     if (error.response) {
       onError != null ? onError(error.response.data) : 42;
     } else {
@@ -38,17 +43,21 @@ async function GetChatGPTArt({
   }
 }
 
-async function GetArtFromDallE(apiKey, prompt, params) {
-  const configuration = new Configuration({
-    apiKey: apiKey,
+async function GetArtFromDallE(apiKey, prompt, model_chosen, img_width, img_height) {
+
+  const openai = new OpenAI({
+    apiKey,
   });
-  const openai = new OpenAIApi(configuration);
-  const response = await openai.createImage({
+  const response = await openai.images.generate({
     prompt,
     n: 1,
-    size: `${params.imgWidth}x${params.imgHeight}`,
+    size: `${img_width}x${img_height}`,
+    model: model_chosen
   });
-  const image_url = response?.data?.data[0]?.url;
+
+  
+
+  const image_url = response?.data[0]?.url;
   return image_url;
 }
 

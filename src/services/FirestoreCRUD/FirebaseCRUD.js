@@ -25,18 +25,18 @@ export async function CreateFirestoreDocument({
 }) {
   try {
     if (!documentId) {
-      console.log(`You gave an invalid documentId`);
+      // console.log( `You gave an invalid documentId`);
       return;
     }
 
     if (!collectionName) {
-      console.log(`You gave an invalid collectionName`);
+      // console.log( `You gave an invalid collectionName`);
       return;
     }
 
     const docRef = db.collection(collectionName).doc(documentId);
     await docRef.set(documentData);
-    console.log("Document created with ID:", docRef.id);
+    // console.log( "Document created with ID:", docRef.id);
 
     return docRef.id;
   } catch (error) {
@@ -50,23 +50,23 @@ export async function CreateFirestoreDocument({
 export async function GetFirestoreDocument({ collectionName, documentId }) {
   try {
     if (!documentId) {
-      console.log(`You gave an invalid documentId`);
+      // console.log( `You gave an invalid documentId`);
       return;
     }
 
     if (!collectionName) {
-      console.log(`You gave an invalid collectionName`);
+      // console.log( `You gave an invalid collectionName`);
       return;
     }
 
     const docRef = db.collection(collectionName).doc(documentId);
     const docSnapshot = await docRef.get();
     if (docSnapshot.exists) {
-      console.log("Document data:", docSnapshot.data());
+      // console.log( "Document data:", docSnapshot.data());
 
       return docSnapshot.data();
     } else {
-      console.log("Document not found");
+      // console.log( "Document not found");
 
       return null;
     }
@@ -85,18 +85,18 @@ export async function UpdateFirestoreDocument({
 }) {
   try {
     if (!documentId) {
-      console.log(`You gave an invalid documentId`);
+      // console.log( `You gave an invalid documentId`);
       return;
     }
 
     if (!collectionName) {
-      console.log(`You gave an invalid collectionName`);
+      // console.log( `You gave an invalid collectionName`);
       return;
     }
 
     const docRef = db.collection(collectionName).doc(documentId);
     await docRef.update(updateData);
-    console.log("Document updated:", docRef.id);
+    // console.log( "Document updated:", docRef.id);
 
     return docRef.id;
   } catch (error) {
@@ -110,22 +110,22 @@ export async function UpdateFirestoreDocument({
 export async function DeleteFirestoreDocument({ collectionName, documentId }) {
   try {
     if (!documentId) {
-      console.log(`You gave an invalid documentId`);
+      // console.log( `You gave an invalid documentId`);
       return;
     }
 
     if (!collectionName) {
-      console.log(`You gave an invalid collectionName`);
+      // console.log( `You gave an invalid collectionName`);
       return;
     }
 
     const docRef = db.collection(collectionName).doc(documentId);
     await docRef.delete();
-    console.log("Document deleted:", docRef.id);
+    // console.log( "Document deleted:", docRef.id);
 
     return docRef.id;
   } catch (error) {
-    console.error("Error deleting document:", error);
+    // console.error("Error deleting document:", error);
 
     return null;
   }
