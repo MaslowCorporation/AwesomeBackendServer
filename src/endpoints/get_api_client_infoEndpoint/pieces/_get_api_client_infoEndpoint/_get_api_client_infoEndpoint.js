@@ -6,7 +6,7 @@ import { DoTheAPIWork } from "../DoTheAPIWork/DoTheAPIWork.js";
 import { UpdateAPIUsage } from "../UpdateAPIUsage/UpdateAPIUsage.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
 
-export async function _get_api_client_infoEndpoint(req, res) {
+export async function _get_api_client_infoEndpoint(req, res, stripe) {
 
   // la clé API présente dans l'URL de requête
   const { apiKey } = req.query;

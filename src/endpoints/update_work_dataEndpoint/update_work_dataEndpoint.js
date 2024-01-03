@@ -9,12 +9,12 @@ import { _update_work_dataEndpoint } from "./pieces/_update_work_dataEndpoint/_u
 
 // Create an endpoint named update_work_data
 // reachable via http://localhost:<apiPort>/update_work_data
-export function update_work_dataEndpoint(app) {
+export function update_work_dataEndpoint(app, stripe) {
   // Uncomment this, and rename photo to the file's FormData's name,
   // if you want to upload a file 
   app.post("/update_work_data/:id", /*upload.single("photo"),*/ async (req, res) => {
     try {
-      await _update_work_dataEndpoint(req, res);
+      await _update_work_dataEndpoint(req, res, stripe);
 
       return;
     } catch (error) {

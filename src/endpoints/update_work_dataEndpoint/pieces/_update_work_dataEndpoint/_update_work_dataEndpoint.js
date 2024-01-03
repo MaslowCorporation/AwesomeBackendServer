@@ -7,7 +7,7 @@ import { DoTheAPIWork } from "../DoTheAPIWork/DoTheAPIWork.js";
 import { UpdateAPIUsage } from "../UpdateAPIUsage/UpdateAPIUsage.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
 
-export async function _update_work_dataEndpoint(req, res) {
+export async function _update_work_dataEndpoint(req, res, stripe) {
   // la clé API présente dans l'URL de requête
   const { apiKey } = req.query;
 
@@ -30,7 +30,7 @@ export async function _update_work_dataEndpoint(req, res) {
   const hashedAPIKey = hashAPIKey(apiKey);
 
   // get the API client data, from his Hashed API Key
-
+  
   const APIClientData = await GetFirestoreDocument({
     collectionName: "APIKeys",
     documentId: hashedAPIKey,

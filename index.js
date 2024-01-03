@@ -1,9 +1,9 @@
 
 
-
 // Utilities and stuff
 import { config } from "dotenv";
 
+// setup the env library to read from the .env file at the root of this server folder
 config();
 
 import express from "express";
@@ -63,7 +63,12 @@ InitRateLimiter(app);
 // le secret key du compte stripe, dispo sections
 // developers du dashboard stripe
 // https://dashboard.stripe.com/test/apikeys
+
+// TEST_STRIPE_CRED
 const stripe_secret_key = "<STRIPE_SECRET_KEY>";
+
+// LIVE_STRIPE_CRED
+//const stripe_secret_key = "<STRIPE_SECRET_KEY>";
 
 // initialse l'instance de stripe,
 // nécessaire pour pouvoir effectuer des requetes payantes
@@ -164,5 +169,4 @@ get_work_statusEndpoint(app);
 
 // exécute l'appli express
 startServer(app);
-
 

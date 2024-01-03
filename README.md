@@ -69,15 +69,6 @@ When your server isn't tied to a URL, during dev, you should put ```http://local
 
 <webhookSecret> = The Stripe Webhook secret
 
-### src/endpoints/webhookEndpoint/pieces/OnAPICheckoutSuccess/HandleAPISubscription.js
-
-<YOUR_PRIVATE_EMAIL> = Your private email address.
-
-If you want to use other email providers, 
-you must change the host and port properties of the SendEmail method call, 
-according to your private email provider settings.
-
-<YOUR_PRIVATE_EMAIL_PWD> = Your private email password
 
 ### .env
 

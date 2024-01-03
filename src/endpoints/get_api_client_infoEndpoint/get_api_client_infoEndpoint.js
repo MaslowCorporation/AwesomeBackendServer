@@ -9,12 +9,12 @@ import { _get_api_client_infoEndpoint } from "./pieces/_get_api_client_infoEndpo
 
 // Create an endpoint named get_api_client_info
 // reachable via http://localhost:<apiPort>/get_api_client_info
-export function get_api_client_infoEndpoint(app) {
+export function get_api_client_infoEndpoint(app, stripe) {
   // Uncomment this, and rename photo to the file's FormData's name,
   // if you want to upload a file 
   app.post("/get_api_client_info", /*upload.single("photo"),*/ async (req, res) => {
     try {
-      await _get_api_client_infoEndpoint(req, res);
+      await _get_api_client_infoEndpoint(req, res, stripe);
 
       return;
     } catch (error) {

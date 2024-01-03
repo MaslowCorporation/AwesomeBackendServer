@@ -5,9 +5,6 @@ import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDat
 
 
 export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
-  // 
-
-
 
   // la clé API présente dans l'URL de requête
   const { apiKey } = req.query;
@@ -87,7 +84,7 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
       // l'url vers laquelle la page de paiement redirigera si
       // paiement successful
       success_url:
-        "<API_URL>/success.html",
+        "<API_URL>/refill_success.html",
 
       // l'url vers laquelle la page de paiement redirigera si
       // paiement cancel/fail
@@ -120,7 +117,11 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
  */
 function GetTopupPriceID(qtyCredits) {
   if (qtyCredits == 5000) {
+    // TEST_STRIPE_CRED
     return "<STRIPE_ITEM_PRICE_ID>";
+
+    // LIVE_STRIPE_CRED
+    // return "<STRIPE_ITEM_PRICE_ID>";
   } else {
     console.log(`Unknown API Credit topup qty: ${qtyCredits}`);
   }

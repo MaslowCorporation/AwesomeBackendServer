@@ -3,22 +3,12 @@ import { createHash } from "crypto";
 import { GetFirestoreDocument } from "../FirestoreCRUD/FirebaseCRUD.js";
 
 // Génère une clé API
-export async function generateAPIKey() {
-  const apiKey = randomBytes(16).toString("hex");
+export async function generateAPIKey(apiKeyQueryParam) {
+  const apiKey = hashAPIKey(apiKeyQueryParam);
   const hashedAPIKey = hashAPIKey(apiKey);
 
-  // récupère le stripe customerId de ce client
-  const customerIdData = await GetFirestoreDocument({
-    documentId: hashedAPIKey,
-    collectionName: "APIKeys",
-  });
+  return { hashedAPIKey, apiKey };
 
-  // Ensure API key is unique
-  if (customerIdData) {
-    return generateAPIKey();
-  } else {
-    return { hashedAPIKey, apiKey };
-  }
 }
 
 // Hash the API key

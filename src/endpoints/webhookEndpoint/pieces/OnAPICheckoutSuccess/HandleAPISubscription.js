@@ -34,7 +34,9 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
 
     // Generate API key, and hashed API key.
     // (hashed = encoded, so filthy hackers don't steal my customers too easily)
-    const { apiKey, hashedAPIKey } = await generateAPIKey();
+
+    const apiKeyFromSuccessURL = getQueryParam(checkoutSession.success_url, "g");
+    const { apiKey, hashedAPIKey } = await generateAPIKey(apiKeyFromSuccessURL);
 
     console.log(`User's API Key: ${apiKey}`);
     console.log(`User's Hashed API Key: ${hashedAPIKey}`);
@@ -66,35 +68,13 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
         },
     });
 
-    await SendEmail({
-        emailType: "private",
-        host: 'mail.privateemail.com',
-        port: 465,
-        fromEmail: "<YOUR_PRIVATE_EMAIL>",
-        fromEmailPwd: "<YOUR_PRIVATE_EMAIL_PWD>",
-        toEmail: customerEmail,
-        subject: "your-api-name API Subscription !",
-        text: `
-Hello, Citizen of the future,
 
-Here's your powerful API Key:
-
-${apiKey}
-
-Please keep this API key secret.
-
-Thank You Sir. You can achieve anything you put your mind to.
-
-The your-api-name corporation.
-`,
-        onSuccess: (info) => {
-            console.log(`Email sent to ${customerEmail}`);
-        },
-        onError: (error) => {
-            console.error(`Error occurred while sending email: ${error.message}`);
-        },
-    });
 
 
     return;
+}
+
+function getQueryParam(url, paramName) {
+    const urlParams = new URLSearchParams(new URL(url).search);
+    return urlParams.get(paramName);
 }

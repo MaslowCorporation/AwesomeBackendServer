@@ -9,13 +9,13 @@ import { _get_work_statusEndpoint } from "./pieces/_get_work_statusEndpoint/_get
 
 // Create an endpoint named get_work_status
 // reachable via http://localhost:<apiPort>/get_work_status
-export function get_work_statusEndpoint(app) {
+export function get_work_statusEndpoint(app, stripe) {
   // Uncomment this, and rename photo to the file's FormData's name,
   // if you want to upload a file 
   app.post("/get_work_status/:id", /*upload.single("photo"),*/ async (req, res) => {
     try {
 
-      await _get_work_statusEndpoint(req, res);
+      await _get_work_statusEndpoint(req, res, stripe);
 
       return;
     } catch (error) {

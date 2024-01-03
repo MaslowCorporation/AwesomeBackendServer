@@ -1,5 +1,8 @@
+import { GetUniqueID } from "../../../../services/GetUniqueID/GetUniqueID.js";
+
 export async function _checkoutEndpoint(stripe, req, res) {
-  // 
+  // baby api key
+  const babyAPIKey = GetUniqueID(16);
 
   const { accessToken, idToken, firebase_uid, email, username, username_photo } = req.body;
 
@@ -21,7 +24,12 @@ export async function _checkoutEndpoint(stripe, req, res) {
       {
         // le price id du produit stripe,
         // dispo section products du dashboard stripe
+
+        // TEST_STRIPE_CRED
         price: "<STRIPE_ITEM_PRICE_ID>",
+
+        // LIVE_STRIPE_CRED
+        //price: "<STRIPE_ITEM_PRICE_ID>",
 
         // how much of it
         quantity: 1
@@ -31,7 +39,7 @@ export async function _checkoutEndpoint(stripe, req, res) {
     // l'url vers laquelle la page de paiement redirigera si
     // paiement successful
     success_url:
-      "<API_URL>/success.html",
+      `<API_URL>/api_sub_success.html?g=${babyAPIKey}`,
 
     // l'url vers laquelle la page de paiement redirigera si
     // paiement cancel/fail
@@ -40,7 +48,9 @@ export async function _checkoutEndpoint(stripe, req, res) {
     // thanks to this param, you can differentiate 
     // between the different purchases the user can make, 
     // in the checkout success webhook
-    client_reference_id: "LifetimeAPISubscription"
+    client_reference_id: "LifetimeAPISubscription",
+
+
   });
 
 
