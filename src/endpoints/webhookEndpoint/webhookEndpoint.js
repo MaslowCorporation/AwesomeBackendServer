@@ -16,7 +16,7 @@ export function webhookEndpoint(app, stripe) {
         .status(400)
         .send(
           "A problem occurred while trying to set up the Stripe webhook mechanism: " +
-            JSON.stringify(error, null, 2)
+          JSON.stringify(error, null, 2)
         );
     }
   });

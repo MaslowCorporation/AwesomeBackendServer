@@ -1,6 +1,7 @@
 import { Constants } from "../../../../AppConstants/Constants.js";
 import { CreateFirestoreDocument } from "../../../../services/FirestoreCRUD/FirebaseCRUD.js";
 import { generateAPIKey } from "../../../../services/GenerateAPIKey/GenerateAPIKey.js";
+import { getFormattedDateTime } from "../../../../services/GetFormattedDateTime/GetFormattedDateTime.js";
 import { CreateDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
 
 import { SendEmail } from "../../../../services/SendEmail/SendEmail.js";
@@ -55,7 +56,7 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
             // the hashed key value
             hashedAPIKey,
 
-            // the email address of the beautfil customer
+            // the email address of the beautiful customer
             customerEmail,
 
             // the type of API subscription the user purchased
@@ -65,6 +66,21 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
             // The fresh user gets 5000 credits 
             // to begin his/her creative journey
             APICredits: 5000,
+
+            // date of birth
+            dateOfBirthUnix: Date.now(),
+            dateOfBirth: getFormattedDateTime()
+        },
+    });
+
+    // store the checkout data in the basket
+    await CreateFirestoreDocument({
+        documentId: hashedAPIKey,
+        collectionName: "APIPurchases",
+        documentData: {
+            // the basket
+            basket: [checkoutSession],
+
         },
     });
 
@@ -78,3 +94,6 @@ function getQueryParam(url, paramName) {
     const urlParams = new URLSearchParams(new URL(url).search);
     return urlParams.get(paramName);
 }
+
+
+

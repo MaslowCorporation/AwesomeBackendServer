@@ -5,6 +5,9 @@ import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDat
 
 
 export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
+  // 
+
+
 
   // la clé API présente dans l'URL de requête
   const { apiKey } = req.query;
@@ -62,13 +65,13 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
     const session = await stripe.checkout.sessions.create({
 
       // the Stripe transaction type
-      mode: "<STRIPE_TRANSACTION_TYPE>",
+      mode: process.env.STRIPE_TRANSACTION_TYPE_5K_CRED,
 
       // l'adresse email optionnelle de l'user
       customer_email: email,
 
       // the stripe payment type(s)
-      payment_method_types: ["<STRIPE_PAYMENT_TYPE>"],
+      payment_method_types: [process.env.STRIPE_PAYMENT_TYPE_5K_CRED],
 
       line_items: [
         {
@@ -84,16 +87,25 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
       // l'url vers laquelle la page de paiement redirigera si
       // paiement successful
       success_url:
-        "<API_URL>/refill_success.html",
+        `${process.env.API_URL}/refill_success.html`,
 
       // l'url vers laquelle la page de paiement redirigera si
       // paiement cancel/fail
-      cancel_url: "<API_URL>/error.html",
+      cancel_url: `${process.env.API_URL}/error.html`,
 
       // thanks to this param, you can differentiate 
       // between the different purchases the user can make, 
       // in the checkout success webhook
       client_reference_id: `Buy${qtyCredits}Credits`,
+
+      // ask for address
+      //billing_address_collection: 'required',
+
+      /** send an invoice email, or not ? */
+      invoice_creation: {
+        enabled: true,
+      },
+
 
       // some additional data we need, for shizzle to go down
       metadata: {
@@ -117,11 +129,7 @@ export async function _checkoutCreditsEndpoint(stripe, req, res, qtyCredits) {
  */
 function GetTopupPriceID(qtyCredits) {
   if (qtyCredits == 5000) {
-    // TEST_STRIPE_CRED
-    return "<STRIPE_ITEM_PRICE_ID>";
-
-    // LIVE_STRIPE_CRED
-    // return "<STRIPE_ITEM_PRICE_ID>";
+    return process.env.STRIPE_ITEM_PRICE_ID_5K_CRED;
   } else {
     console.log(`Unknown API Credit topup qty: ${qtyCredits}`);
   }

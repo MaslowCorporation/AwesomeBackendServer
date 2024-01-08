@@ -2,6 +2,8 @@ import { UpdateAPIUsage } from "../../UpdateAPIUsage/UpdateAPIUsage.js";
 import { DoTheAPIWork } from "../DoTheAPIWork.js";
 
 export async function get_gpt_outputJob(job) {
+
+
   console.log(`Job loop "get_gpt_output" has just started !`);
 
   // do the main API work here.
@@ -16,7 +18,7 @@ export async function get_gpt_outputJob(job) {
   // the graal, the caviar, the og kush, here you go !
   return { answer: outputData, usage: record };
 
-  
+
 }
 
 

@@ -11,7 +11,7 @@ import { GetDatabaseDocument, UpdateDatabaseDocument } from "../../../../service
  *
  */
 export async function Handle5KCreditsPurchase(checkoutSession) {
-    
+
 
     // the hashed API key of the beautiful soul who just bought 
     // 5000 API Credits
@@ -26,7 +26,7 @@ export async function Handle5KCreditsPurchase(checkoutSession) {
         collectionName: "APIKeys",
     });
 
-    
+
 
     // store the customer id in your Firestore database
     await UpdateFirestoreDocument({
@@ -38,6 +38,25 @@ export async function Handle5KCreditsPurchase(checkoutSession) {
             // increment the shizzle
             APICredits: customerData.APICredits + 5000
         },
+    });
+
+
+    // the current purchases history stored in DB for this customer
+    const customerPurchaseData = await GetFirestoreDocument({
+        documentId: hashedAPIKey,
+        collectionName: "APIPurchases",
+    });
+
+
+
+    // store the customer purchase in your Firestore database
+
+    customerPurchaseData.basket.push(checkoutSession)
+
+    await UpdateFirestoreDocument({
+        documentId: hashedAPIKey,
+        collectionName: "APIPurchases",
+        updateData: customerPurchaseData,
     });
 
     return;

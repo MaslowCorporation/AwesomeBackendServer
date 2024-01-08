@@ -11,68 +11,101 @@ A humble and practical server ;-)
 
 <SERVER_URL> = the URL tied to your server
 
-### index.js
-
-<STRIPE_SECRET_KEY> = The secret key of your Stripe account, available here: 
-https://dashboard.stripe.com/test/apikeys
-
 ### src/services/FirestoreCRUD/FirebaseCRUD.js
 
 {
   /* Your Firestore admin data belongs here */
 }
 
-should be replaced with the Firestore admin data available on your Firestore account:
+should be replaced with the Firestore admin JSON data available on your Firestore account.
 
-### src/AppConstants/Constants.js
+Also, turn this line of code
 
-<OPENAI_API_KEY> = The OpenAI account API Key
+```
+let db = null; // InitFirestore();
+```
 
-<cloudinary_cloud_name> = The cloud name of your Cloudinary account.
+into 
 
-<cloudinary_upload_preset> = The Upload preset of your Cloudinary account. 
-Go to Settings (gear icon) / Upload / Upload Presets.
-Copy the unsigned upload preset.
+```
+let db = InitFirestore();
+```
 
-<cloudinary_api_key> = The Cloudinary account api key
-
-<cloudinary_api_secret> = The Cloudinary account api secret
-
-<cloudinary_email> = The email address of your Cloudinary account
-
-### src/endpoints/checkoutEndpoint/pieces/_checkoutEndpoint/_checkoutEndpoint.js
-
-<STRIPE_TRANSACTION_TYPE> = The Stripe transaction type. For a one time payment, it is "payment"
-
-<STRIPE_PAYMENT_TYPE> = The Stripe payment type during the subscription transaction.
-To pay with credits cards, it is "card"
-
-<STRIPE_ITEM_PRICE_ID> = The Stripe item price id
-
-<API_URL> = The Base URL of your API/Server (for ex. https://my.ultra.api.io)
-When your server isn't tied to a URL, during dev, you should put ```http://localhost:8080``` as the URL
-
-### src/endpoints/checkoutCreditsEndpoint/pieces/_checkoutCreditsEndpoint/_checkoutCreditsEndpoint.js
-
-<STRIPE_TRANSACTION_TYPE> = The Stripe transaction type. For a one time payment, it is "payment"
-
-<STRIPE_PAYMENT_TYPE> = The Stripe payment type during the subscription transaction.
-To pay with credits cards, it is "card"
-
-<STRIPE_ITEM_PRICE_ID> = The Stripe item price id
-
-<API_URL> = The Base URL of your API/Server (for ex. https://my.ultra.api.io)
-When your server isn't tied to a URL, during dev, you should put ```http://localhost:8080``` as the URL
-
-
-### src/endpoints/webhookEndpoint/pieces/_webhookEndpoint/_webhookEndpoint.js
-
-<webhookSecret> = The Stripe Webhook secret
 
 
 ### .env
 
-<set ```REDIS_URL="YOUR_REDIS_URL"``` if you want to upload on RailWay
+Your .env file needs the following stuff 
+
+```
+
+# TEST_STRIPE_CREDENTAILS (localhost)
+#
+# Uncomment this block If you're testing your server monetization features, while using the
+#
+# npx maslow start-server-unix or start-server-win10
+#STRIPE_SECRET_KEY="sk_test_xxxxxxx"
+#STRIPE_TRANSACTION_TYPE_API_SUB="payment"
+#STRIPE_PAYMENT_TYPE_API_SUB="card"
+#STRIPE_ITEM_PRICE_ID_API_SUB="price_xxxxxxx"
+#STRIPE_TRANSACTION_TYPE_5K_CRED="payment"
+#STRIPE_PAYMENT_TYPE_5K_CRED="card"
+#STRIPE_ITEM_PRICE_ID_5K_CRED="price_xxxxxx"
+#API_URL="http://localhost:8080"
+#WEBHOOK_SECRET="whsec_xxxxxxx"
+
+# TEST_STRIPE_CREDENTAILS (cloud)
+#
+# Uncomment this block If you're testing your server monetization features 
+# (AKA making test Stripe payments, etc...), 
+# on RailWay, or any other server/VPS/Heroku/etc...
+# and you're using a test webhook created from the stripe dashboard
+# instead of using stripe-cli on localhost
+#REDIS_URL="redis://xxxxxxxxxx@xxxxxxxxxxxxxxx"
+#STRIPE_SECRET_KEY="sk_test_xxxxxxx"
+#STRIPE_TRANSACTION_TYPE_API_SUB="payment"
+#STRIPE_PAYMENT_TYPE_API_SUB="card"
+#STRIPE_ITEM_PRICE_ID_API_SUB="price_xxxxxxx"
+#STRIPE_TRANSACTION_TYPE_5K_CRED="payment"
+#STRIPE_PAYMENT_TYPE_5K_CRED="card"
+#STRIPE_ITEM_PRICE_ID_5K_CRED="price_xxxxxx"
+#API_URL="http://localhost:8080"
+#WEBHOOK_SECRET="whsec_xxxxxxx"
+
+# LIVE_STRIPE_CREDENTAILS (cloud)
+#
+# Uncomment this block If you're implementing a live monetized server,
+# ready to accept REAL payments (Stripe live mode) 
+# on RailWay, or any other server/VPS/Heroku/etc...
+# and you're using a live webhook created from the stripe dashboard
+#REDIS_URL="redis://xxxxxxxxxx@xxxxxxxxxxxxxxx"
+#STRIPE_SECRET_KEY="sk_live_xxxxxxx"
+#STRIPE_TRANSACTION_TYPE_API_SUB="payment"
+#STRIPE_PAYMENT_TYPE_API_SUB="card"
+#STRIPE_ITEM_PRICE_ID_API_SUB="price_xxxxxxx"
+#STRIPE_TRANSACTION_TYPE_5K_CRED="payment"
+#STRIPE_PAYMENT_TYPE_5K_CRED="card"
+#STRIPE_ITEM_PRICE_ID_5K_CRED="price_xxxxxx"
+#API_URL="https://your_server_url.com"
+#WEBHOOK_SECRET="whsec_xxxxxxx"
+
+# The OPENAI API Key, to get wisdom from the A.I. wizard.
+#
+# Uncomment this env variable if you're using OpenAI in your backend
+#OPENAI_API_KEY="sk-xxxxxxxx"
+
+
+# The Cloudinary account's credentials, if you want to upload stuff.
+#
+# Uncomment this block if you want to use Cloudinary on your backend.
+#cloudinary_email="cloudinary.acct@gmail.com"
+#cloudinary_cloud_name="xxxxxxxxxx"
+#cloudinary_upload_preset="xxxxxxxxxx"
+#cloudinary_api_key="xxxxxxxxxxxx"
+#cloudinary_api_secret="xxxxxxxxxxxxxxxx"
+
+
+```
 
 ## Troubleshooting
 

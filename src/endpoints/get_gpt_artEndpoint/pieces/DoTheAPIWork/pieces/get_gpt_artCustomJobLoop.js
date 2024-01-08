@@ -21,7 +21,7 @@ export async function get_gpt_artCustomJobLoop(job) {
     GetChatGPTArt({
       model_chosen: job.data.model_chosen,
       prompt: job.data.prompt,
-      apiKey: Constants.OPENAI_API_KEY,
+      apiKey: process.env.OPENAI_API_KEY,
       img_width: job.data.img_width,
       img_height: job.data.img_height,
       onSuccess: (data) => {

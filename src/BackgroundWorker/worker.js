@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import throng from 'throng';
 import Queue from 'bull';
 
@@ -43,11 +45,14 @@ let maxJobsPerWorker = 50;
 function start() {
 
 
+
   const workQueue = GetJobQueue();
 
   // Initialize BullMQ Queue and other components
   workQueue.process(maxJobsPerWorker, async (job) => {
     let output;
+
+
 
     switch (job.data.api_endpoint_name) {
       // PLOP_INJECT_ENDPOINT_JOB_CASE

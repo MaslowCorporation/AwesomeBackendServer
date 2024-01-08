@@ -24,6 +24,8 @@ export async function get_gpt_outputLongWork(req, res) {
   // so we know what work needs to be done in the background
   const api_endpoint_name = "get_gpt_output";
 
+
+
   // add a background job in a BullMQ Queue
   await AddJobInQueue({
     workQueue,
@@ -33,8 +35,8 @@ export async function get_gpt_outputLongWork(req, res) {
     res,
     args: {
       // these are the args used during A.I. Chat Completion.
-      prompt, 
-      params, 
+      prompt,
+      params,
       model_chosen,
     }
   });

@@ -7,14 +7,7 @@ export async function _webhookEndpoint(req, res, stripe) {
 
   // Check if webhook signing is configured.
 
-  // TEST_STRIPE_CRED (localhost version)
-  const webhookSecret = "<webhookSecret>";
-
-  // TEST_STRIPE_CRED (cloud version)
-  //const webhookSecret = "<webhookSecret>";
-
-  // LIVE_STRIPE_CRED
-  //const webhookSecret = "<webhookSecret>";
+  const webhookSecret = process.env.WEBHOOK_SECRET;
 
   if (webhookSecret) {
     // Retrieve the event by verifying the signature using the raw body and secret.
@@ -31,6 +24,7 @@ export async function _webhookEndpoint(req, res, stripe) {
       console.log(`⚠️  Webhook signature verification failed.`);
       return res.sendStatus(400);
     }
+
     // Extract the object from the event.
     data = event.data;
     eventType = event.type;

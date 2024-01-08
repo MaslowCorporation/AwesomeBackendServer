@@ -24,7 +24,7 @@ export async function upload_file_cloudCustomJobLoop(job) {
 
 
 
-  const uploadPreset = Constants.cloudinary_upload_preset;
+  const uploadPreset = process.env.cloudinary_upload_preset;
 
   return new Promise((resolve, reject) => {
     UploadFileToCloudinary({

@@ -59,13 +59,13 @@ export async function TransformCloudFile({
         */
 
         InitCloudinary({
-            cloud_name: Constants.cloudinary_cloud_name,
-            api_key: Constants.cloudinary_api_key,
-            api_secret: Constants.cloudinary_api_secret
+            cloud_name: process.env.cloudinary_cloud_name,
+            api_key: process.env.cloudinary_api_key,
+            api_secret: process.env.cloudinary_api_secret
         });
 
         const versionOrNone = version ? '/' + version : "";
-        const cloudName =  Constants.cloudinary_cloud_name;
+        const cloudName = process.env.cloudinary_cloud_name;
 
         let result = `https://res.cloudinary.com/${cloudName}/${assetType}/${deliveryType}/${transformations}${versionOrNone}/${publicId}.${fileExtension}`;
 

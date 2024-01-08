@@ -1,15 +1,17 @@
 import bodyParser from "body-parser";
 
-// To handle webhooks safely,
-// we need to verify the webhook signature to guarantee that it actually came from Stripe.
-// The webhook requires the request body,
-// as a raw buffer,
-// which we can format with some express middleware.
+// Sets the Formatting stuff for HTTP requests
 export function FormatRequestBodies(app, express) {
+  // Stripe webhook shizzle
   app.use(
     express.json({
-      verify: (req, res, buffer) => (req["rawBody"] = buffer),
+      verify: (req, res, buffer) => (req['rawBody'] = buffer),
     })
   );
+
+  // allows serializable data in requests payloads
   app.use(express.urlencoded({ extended: true }));
+
+  // formatting to serve static files from the /public folder
+  app.use(express.static('public'));
 }

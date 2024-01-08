@@ -76,13 +76,6 @@ const Constants = {
   no: "Non",
   regeneration_command: `npx maslow regen-ai-func`,
 
-
-  cloudinary_email: "<cloudinary_email>",
-  cloudinary_cloud_name: "<cloudinary_cloud_name>",
-  cloudinary_upload_preset: "<cloudinary_upload_preset>",
-  cloudinary_api_key: "<cloudinary_api_key>",
-  cloudinary_api_secret: "<cloudinary_api_secret>",
-  OPENAI_API_KEY: "<OPENAI_API_KEY>",
 };
 
 export { Constants };

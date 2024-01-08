@@ -18,6 +18,8 @@ async function GetChatGPTOutput({
   print = false,
 }) {
   try {
+
+
     const model_max_tok = Constants.modelsMaxTokens[model_chosen];
 
     const prompt_token_length = GetPromptTokensLength(model_chosen, prompt);
@@ -101,6 +103,8 @@ async function GetChatCompletion({
   params,
   availableTokens,
 }) {
+
+
   let result = "";
   const inputTokens = GetPromptTokensLength(model_chosen, prompt);
 
@@ -120,6 +124,8 @@ async function GetChatCompletion({
     messages: [{ role: 'user', content: prompt }],
     stream: true,
   });
+
+
 
 
 

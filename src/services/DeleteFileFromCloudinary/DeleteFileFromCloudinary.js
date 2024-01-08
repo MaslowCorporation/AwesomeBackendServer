@@ -11,9 +11,9 @@ async function DeleteFileFromCloudinary({
 }) {
   try {
     InitCloudinary({
-      cloud_name: Constants.cloudinary_cloud_name,
-      api_key: Constants.cloudinary_api_key,
-      api_secret: Constants.cloudinary_api_secret
+      cloud_name: process.env.cloudinary_cloud_name,
+      api_key: process.env.cloudinary_api_key,
+      api_secret: process.env.cloudinary_api_secret
     });
 
     const response = await cloudinary.v2.uploader.destroy(publicId, {

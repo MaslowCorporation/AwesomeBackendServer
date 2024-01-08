@@ -6,14 +6,14 @@ import { DeleteClientFile } from "./DeleteClientFile.js";
 
 
 export async function DoTheAPIWork(req) {
-  
+
 
   const { model_chosen, prompt, params } = req.body;
 
   /*
   
   const paramsObj = params ? JSON.parse(params) : {};
-  const apiKey = Constants.OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
 
   // Specify the destination subfolder where we store the files of this client
   const uploadPath = GetFolderForClientData(req);
@@ -29,7 +29,7 @@ export async function DoTheAPIWork(req) {
   */
 
   return new Promise((resolve, reject) => {
-    
+
 
     /*
     

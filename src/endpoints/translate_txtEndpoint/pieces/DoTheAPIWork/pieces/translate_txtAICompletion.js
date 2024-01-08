@@ -30,7 +30,7 @@ export async function translate_txtAICompletion(job) {
 
 
 
-  const OPENAI_API_KEY = Constants.OPENAI_API_KEY;
+  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
   return new Promise((resolve, reject) => {
 

@@ -15,12 +15,12 @@ async function UploadFileToCloudinary({
   try {
 
     InitCloudinary({
-      cloud_name: Constants.cloudinary_cloud_name,
-      api_key: Constants.cloudinary_api_key,
-      api_secret: Constants.cloudinary_api_secret
+      cloud_name: process.env.cloudinary_cloud_name,
+      api_key: process.env.cloudinary_api_key,
+      api_secret: process.env.cloudinary_api_secret
     });
 
-    
+
     const parser = new DatauriParser();
 
     const buffer = fileData.buffer;
@@ -39,9 +39,9 @@ async function UploadFileToCloudinary({
     RunIfPossible({ func: onSuccess, args: response });
 
     return response;
-    
+
   } catch (error) {
- 
+
 
     RunIfPossible({ func: onError, args: error });
 
