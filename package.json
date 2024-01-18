@@ -14,7 +14,7 @@
     "worker": "node ./src/BackgroundWorker/worker.js",
     "stripe": "stripe listen --forward-to localhost:8080/webhook",
     "stripe-heroku": "stripe listen --forward-to <SERVER_URL>",
-    "push": "(git checkout main && git add . && git commit -m \"I'm a bigger pusher than Ice-T homie !!!\" && git push) || exit 0",
+    "push": "(git add . && git commit -m \"I'm a bigger pusher than Ice-T homie !!!\" && git push) || exit 0",
 
     
     "redis-server-win10": "cd RedisWin10 && redis-server.exe ./redis.windows.conf",
