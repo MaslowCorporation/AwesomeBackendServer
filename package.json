@@ -19,7 +19,7 @@
     "redis-cli-win10": "cd RedisWin10 && redis-cli.exe",
     "start-server-win10": "concurrently \"node ./index.js\" \"npm run redis-server-win10\" \"npm run redis-cli-win10\" \"npm run worker\" \"npm run stripe\"",
     "start-server-unix": "concurrently \"node ./index.js\" \"npm run redis-server-unix\" \"npm run redis-cli-unix\" \"npm run worker\" \"npm run stripe\"",
-    "redis-server-unix": "redis-server --port 7381",
+    "redis-server-unix": "redis-server",
     "redis-cli-unix": "redis-cli"
   },
   "keywords": [],
