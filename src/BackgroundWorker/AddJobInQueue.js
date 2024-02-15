@@ -1,6 +1,5 @@
 import { hashAPIKey } from "../services/GenerateAPIKey/GenerateAPIKey.js";
 
-
 export async function AddJobInQueue({
   workQueue, 
   jobId, 
@@ -8,7 +7,10 @@ export async function AddJobInQueue({
   req, 
   res, 
   args,
+  quickResponseArgs,
 }) {
+  
+  
   // the API Key present in the 'apiKey' query parameter.
   // of the request URL.
   const { apiKey } = req.query;
@@ -16,7 +18,7 @@ export async function AddJobInQueue({
    // If an API key has been given by the user,
   // encode the API key given by the user,
   // then see if it exists in the API Key database.
-  const hashedAPIKey = hashAPIKey(apiKey);
+  const hashedAPIKey = apiKey && hashAPIKey(apiKey);
 
   // Docs: https://github.com/OptimalBits/bull/blob/develop/REFERENCE.md
   let job = await workQueue.add(
@@ -33,10 +35,12 @@ export async function AddJobInQueue({
       //
       // The creation_time_unix is a timestamp, a date of birth of the job
       //
-      // DONT REMOVE THESE PROPERTIES !!!
+      // DONT EDIT OR REMOVE THESE PROPERTIES !!!
+      // This is important shizzle !!!!
       api_endpoint_name,
       creation_time_unix: Date.now(),
       hashedAPIKey,
+      job_executed: false,
     },
     // here you can set options for this shizzle.
     {
@@ -44,7 +48,7 @@ export async function AddJobInQueue({
     }
   );
 
-  res.json({ id: job.id });
+  res.json({ ...quickResponseArgs, id: job.id });
 
   return jobId;
 }

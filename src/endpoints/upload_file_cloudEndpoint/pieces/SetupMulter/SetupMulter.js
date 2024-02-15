@@ -4,15 +4,12 @@ import { GetFolderForClientData } from '../../../../services/GetFolderForClientD
 
 export function SetupMulter() {
   const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      const uploadPath = GetFolderForClientData(req); // Specify the destination subfolder
-
-      fs.mkdirSync(uploadPath, { recursive: true }); // Create the subfolder if it doesn't exist
-      cb(null, uploadPath); // Set the destination path
+    destination: function (req, file, cb) {
+      cb(null, 'files/')
     },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname); // Use the original file name as the filename
-    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
   });
   const upload = multer({ storage });
   return upload;

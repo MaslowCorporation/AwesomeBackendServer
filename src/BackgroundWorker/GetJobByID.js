@@ -70,8 +70,10 @@ export async function GetJobByID({ req, res, workQueue }) {
       // The initial data passed to the job.
       //
       // This data can be updated from within the job,
-      // so update data can be passed to the frontend/client
-      data,
+      // so update data can be passed to the frontend/client.
+      // I set it to null, because sometimes, the data can be heavy, like a file buffer,
+      // so in order to have lightweight responses, lift the weight off.
+      data: null,
 
       // the error reason/msg, if shit got sour
       reason

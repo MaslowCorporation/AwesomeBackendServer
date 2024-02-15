@@ -35,8 +35,8 @@ export async function compile_arduino_sketchCustomJobLoop(job) {
     CompileArduinoSketch({
       code_string: job.data.code_string,
       sketchName: job.data.sketchName,
-      inputsFolder: "/home/arduino/inputs",
-      outputsFolder: "/home/arduino/outputs",
+      inputsFolder: "./arduino/inputs",
+      outputsFolder: "./arduino/outputs",
       onSuccess: (data) => {
 
         /**

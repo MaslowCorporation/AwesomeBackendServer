@@ -4,10 +4,14 @@ import { GetFirestoreDocument } from "../FirestoreCRUD/FirebaseCRUD.js";
 
 // Génère une clé API
 export async function generateAPIKey(apiKeyQueryParam) {
-  const apiKey = hashAPIKey(apiKeyQueryParam);
-  const hashedAPIKey = hashAPIKey(apiKey);
-
-  return { hashedAPIKey, apiKey };
+  try {
+    const apiKey = hashAPIKey(apiKeyQueryParam);
+    const hashedAPIKey = hashAPIKey(apiKey);
+  
+    return { hashedAPIKey, apiKey };
+  } catch (error) {
+    return null;
+  }
 
 }
 

@@ -5,6 +5,12 @@ import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { GetFileContentsIfExisting } from '../GetFileContentsIfExisting/GetFileContentsIfExisting.js';
+import { OSWork } from '../OSWork/OSWork.js';
+
+
+
+
+
 
 // Function to compile the Arduino source code
 /**
@@ -37,6 +43,7 @@ export async function CompileArduinoSketch({
     onError
 }) {
     try {
+        
 
         // Create input and output directories
         fs.mkdirSync(inputsFolder, { recursive: true });
@@ -50,10 +57,17 @@ export async function CompileArduinoSketch({
         const inputFolder = path.join(inputsFolder, sketchName);
         const outputFolder = path.join(outputsFolder, sketchName);
 
-        // Run sketch new command with arduino-cli to create sketch folder
-        const newSketchCommand = `arduino-cli sketch new ${inputFolder}`;
-        exec(newSketchCommand, async (err) => {
+        const arduino_cli_path = await OSWork({
+            onWindows: () => "./ImportantAssets/arduino-cli/arduino-cli-windows.exe",
+            onLinux: () => "./ImportantAssets/arduino-cli/arduino-cli-linux",
+            onMacOS: () => "./ImportantAssets/arduino-cli/arduino-cli-macos",
+        })
 
+        // Install the arduino related stuff if needed,
+        // then run the sketch new command with arduino-cli to create sketch folder
+        const newSketchCommand = `${arduino_cli_path} core install arduino:avr; ./${arduino_cli_path} sketch new ${inputFolder}`;
+        exec(newSketchCommand, async (err) => {
+            
 
             if (err) {
                 onError(err);  // Handle the error in sketch creation
@@ -68,9 +82,9 @@ export async function CompileArduinoSketch({
                 const fqbn = 'arduino:avr:uno';
 
                 // Run compile command with arduino-cli to compile the sketch
-                const compileCommand = `arduino-cli compile --fqbn ${fqbn} --output-dir ${outputFolder} ${inoFilePath}`;
+                const compileCommand = `${arduino_cli_path} compile --fqbn ${fqbn} --output-dir ${outputFolder} ${inoFilePath}`;
                 exec(compileCommand, async (err, stdout) => {
-
+                    
 
                     if (err) {
                         onError(err); // Handle compilation errors

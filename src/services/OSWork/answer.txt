@@ -1,0 +1,40 @@
+```javascript
+// osspecificwork.js
+
+export function OSSpecificWork(onWindows, onLinux, onMacOS) {
+  const platform = process.platform;
+  
+  switch (platform) {
+    case 'win32':
+      return onWindows();
+    case 'linux':
+      return onLinux();
+    case 'darwin':
+      return onMacOS();
+    default:
+      throw new Error('Unsupported platform');
+  }
+}
+```
+
+To use this function in another file:
+
+```javascript
+// index.js
+
+import { OSSpecificWork } from './osspecificwork.js';
+
+function onWindows() {
+  console.log('Running on Windows');
+}
+
+function onLinux() {
+  console.log('Running on Linux');
+}
+
+function onMacOS() {
+  console.log('Running on macOS');
+}
+
+OSSpecificWork(onWindows, onLinux, onMacOS);
+```

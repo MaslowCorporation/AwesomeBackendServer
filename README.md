@@ -1,7 +1,7 @@
 # maslow-gpt-api-v2 🌎
 
-A humble and practical server ;-)
 
+A humble and practical server ;-)
 
 ## Placeholders in this codebase
 

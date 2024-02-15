@@ -7,16 +7,14 @@
   "scripts": {
     "reset-main-branch": "git checkout --orphan latest_branch && git add -A && git commit -am \"First commit ;-)\" && git branch -D main && git branch -m main && git push -f --set-upstream origin main",
     "kill-8080": "npx kill-port 8080",
-    "first-push": "npm run git-init && git add . && git commit -m \"first commit\" && git branch -M main && git remote add origin <GITHUB_URL> && git push -u origin main",
+    "first-push": "npm run git-init && git add . && git commit -m \"first commit\" && git branch -M main && git remote add origin https://github.com/MaslowCorporation/maslow-gpt-api-v2.git && git push -u origin main",
     "git-init": "rimraf .git && git init",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"node ./index.js\" \"npm run worker\"",
     "worker": "node ./src/BackgroundWorker/worker.js",
     "stripe": "stripe listen --forward-to localhost:8080/webhook",
-    "stripe-heroku": "stripe listen --forward-to <SERVER_URL>",
+    "stripe-heroku": "stripe listen --forward-to https://maslowschool.tech/webhook",
     "push": "(git add . && git commit -m \"I'm a bigger pusher than Ice-T homie !!!\" && git push) || exit 0",
-
-    
     "redis-server-win10": "cd RedisWin10 && redis-server.exe ./redis.windows.conf",
     "redis-cli-win10": "cd RedisWin10 && redis-cli.exe",
     "start-server-win10": "concurrently \"node ./index.js\" \"npm run redis-server-win10\" \"npm run redis-cli-win10\" \"npm run worker\" \"npm run stripe\"",

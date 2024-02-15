@@ -4,9 +4,15 @@ import { GetJobQueue } from "../../../../../BackgroundWorker/GetJobQueue.js";
 import { GetFolderForClientData } from "../../../../../services/GetFolderForClientData/GetFolderForClientData.js";
 import { GetUniqueID } from "../../../../../services/GetUniqueID/GetUniqueID.js";
 import path from "path";
+import { OSWork } from "../../../../../services/OSWork/OSWork.js";
+import { UploadFileToCloudinary } from "../../../../../services/UploadFileToCloudinary/UploadFileToCloudinary.js";
+import { UpdateAPIUsage } from "../../UpdateAPIUsage/UpdateAPIUsage.js";
+import { hashAPIKey } from "../../../../../services/GenerateAPIKey/GenerateAPIKey.js";
+
 
 export async function upload_file_cloudLongWork(req, res) {
-  
+
+
 
   // the data passed by the API client.
   //
@@ -27,24 +33,63 @@ export async function upload_file_cloudLongWork(req, res) {
   // raw (any other file type)
   const { resourceType } = req.body;
 
+
   // the client file 
   const file = req.file;
+
+  // Check if file exists
+  if (!file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  UploadFileToCloudinary({
+    fileBuffer: req.file.buffer,
+    resourceType,
+    onSuccess: async (data) => {
+      
+
+      console.log(`Upload success !: ${JSON.stringify(data, null, 2)}`);
+
+      // Here you update API usage stuff, if needed
+      // If you choose to monetize this API
+      const { apiKey } = req.query;
+      const hashedAPIKey = hashAPIKey(apiKey);
+      const bogusJob = { data: { hashedAPIKey }};
+      const record = await UpdateAPIUsage(data, bogusJob);
+
+      // return the final output, the fruit of your labor,
+      // the graal, the caviar, the og kush, here you go !
+      const output =  { answer: data, usage: record };
+
+      res.json(output)
+    },
+    onError: (e) => {
+
+
+      console.log(`Upload error !: ${JSON.stringify(e, null, 2)}`);
+
+      res.status(400).send(`Upload failed: ${JSON.stringify(e, null, 2)}`)
+    },
+  });
+
+  // the client file path
+  //const filePath = await GetFilePathFromMulterFilesystem(req);
 
   //console.log(`req: ${JSON.stringify(req.file, null, 2)}`)
 
   // the queue
-  let workQueue = GetJobQueue();
-
+  //let workQueue = GetJobQueue();
 
   // add id of this job, so we can handle it later
-  const jobId = GetUniqueID(15);
+  //const jobId = GetUniqueID(15);
+
 
   // the name of the endpoint that's about to add a job in the queue.
   // so we know what work needs to be done in the background
-  const api_endpoint_name = "upload_file_cloud";
+  //const api_endpoint_name = "upload_file_cloud";
 
   // add a background job in a BullMQ Queue
-  await AddJobInQueue({
+  /*await AddJobInQueue({
     workQueue,
     jobId,
     api_endpoint_name,
@@ -52,9 +97,22 @@ export async function upload_file_cloudLongWork(req, res) {
     res,
     args: {
       resourceType,
-      file
+      fileBuffer: file.buffer,
     }
-  });
+  });*/
 
-  
+
+}
+
+async function GetFilePathFromMulterFilesystem(req) {
+  const folderUploadPath = await GetFolderForClientData(req);
+  const fileInfo = req.file;
+
+
+  const filePath = path.join(
+    folderUploadPath,
+    fileInfo.originalname
+  );
+
+  return filePath;
 }

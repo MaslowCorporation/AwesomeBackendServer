@@ -5,14 +5,29 @@ import { Constants } from "../../AppConstants/Constants.js";
 //import fs from "fs";
 import DatauriParser from "datauri/parser.js";
 import path from "path";
+import streamifier from 'streamifier'
+import { FileExists } from "../FileExists/FileExists.js";
 
 async function UploadFileToCloudinary({
-  fileData,
+  filePath,
+  fileBuffer,
   resourceType,
   onSuccess,
   onError,
 }) {
   try {
+
+
+    /*
+    const folderName = path.dirname(filePath);
+    const grandFolderName = path.dirname(folderName);
+    const grandGrandFolderName = path.dirname(grandFolderName);
+
+    console.log(`file ${filePath} exists ? ${FileExists(filePath)}`)
+    console.log(`folder ${folderName} exists ? ${FileExists(folderName)}`)
+    console.log(`folder ${grandFolderName} exists ? ${FileExists(grandFolderName)}`)
+    console.log(`folder ${grandGrandFolderName} exists ? ${FileExists(grandGrandFolderName)}`)
+    */
 
     InitCloudinary({
       cloud_name: process.env.cloudinary_cloud_name,
@@ -20,19 +35,15 @@ async function UploadFileToCloudinary({
       api_secret: process.env.cloudinary_api_secret
     });
 
+    let response;
 
-    const parser = new DatauriParser();
-
-    const buffer = fileData.buffer;
-
-    const data = parser.format(path.extname(fileData.originalname), buffer); //=> "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-
-    console.log(`upload data string: ${data.content}`);
-
-
-    const response = await cloudinary.v2.uploader.upload(data.content, {
-      resource_type: resourceType,
-    });
+    if (filePath) {
+      response = await UploadFileFromPath(filePath, resourceType);
+    } else if (fileBuffer) {
+      response = await UploadFileFromBuffer(fileBuffer, resourceType)
+    } else {
+      throw new Error(`Invalid file data: file path = ${filePath}, file buffer = ${fileBuffer}`)
+    }
 
 
     // run the success callback
@@ -49,4 +60,42 @@ async function UploadFileToCloudinary({
   }
 }
 
+async function UploadFileFromPath(filePath, resourceType) {
+  return await cloudinary.v2.uploader.upload(filePath, {
+    resource_type: resourceType,
+  });
+}
+
+async function UploadFileFromBuffer(fileBuffer, resourceType) {
+  return new Promise((resolve, reject) => {
+    
+
+    let cld_upload_stream = cloudinary.v2.uploader.upload_stream(
+      {
+        //folder: "uploads",
+        resource_type: resourceType,
+      },
+      (error, result) => {
+        
+
+
+        if (result) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      }
+    );
+
+
+
+    // eslint-disable-next-line no-undef
+    //const fileBufferRealDeal = Buffer.from(fileBuffer);
+
+    streamifier.createReadStream(fileBuffer).pipe(cld_upload_stream);
+  });
+}
+
 export { UploadFileToCloudinary };
+
+

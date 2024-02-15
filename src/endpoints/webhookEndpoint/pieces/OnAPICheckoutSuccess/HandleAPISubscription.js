@@ -15,6 +15,8 @@ import { SendEmail } from "../../../../services/SendEmail/SendEmail.js";
  *
  */
 export async function HandleAPISubscription(checkoutSession, itemId) {
+    
+
     const customerId = checkoutSession.id;
 
     // this is the email address of htis customer
@@ -30,8 +32,18 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
     const customerEmailFromCheckoutPage = checkoutSession.customer_details.email;
     const customerEmail = customerEmailFromCheckoutGeneration ?? customerEmailFromCheckoutPage;
 
+    
+
+    // google user data
+    //
+    // { accessToken, idToken: null, firebase_uid, email, username, username_photo }
+    const googleUserInfo = checkoutSession.metadata;
+    const googleEmail = googleUserInfo?.email;
+    const googleEmailKey = await generateAPIKey(googleEmail)
+
     console.log(`Customer's email: ${customerEmail}`);
     console.log(`💰 Customer ${customerId} just bought this item: ${itemId}`);
+    //console.log('google uid = ' + googleUid)
 
     // Generate API key, and hashed API key.
     // (hashed = encoded, so filthy hackers don't steal my customers too easily)
@@ -80,6 +92,17 @@ export async function HandleAPISubscription(checkoutSession, itemId) {
         documentData: {
             // the basket
             basket: [checkoutSession],
+
+        },
+    });
+
+    // store the google user data
+    googleEmailKey && await CreateFirestoreDocument({
+        documentId: googleEmailKey.apiKey,
+        collectionName: "GoogleUsers",
+        documentData: {
+            ...googleUserInfo,
+            apiKey: apiKeyFromSuccessURL,
 
         },
     });

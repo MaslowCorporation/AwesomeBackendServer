@@ -51,7 +51,8 @@ async function GetChatGPTOutput({
 
   } catch (error) {
 
-
+    console.log(`A problem occurred while trying to complete a prompt: ${JSON.stringify(error, null, 2)}`)
+    
     if (error.response) {
       onError && onError(error.response.data);
     } else {

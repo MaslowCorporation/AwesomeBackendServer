@@ -36,7 +36,7 @@ async function TranslateText({
 
     const outputText = await GetChatGPTOutput({
       model_chosen,
-      prompt: `Translate the following string to ${language}, and return the translated string: '${text.trim()}'`, //` . Format it like this: <txt_1><translation><txt_1> . `,
+      prompt: `Return "${text.trim()}" in ${language}. I plan on using your completion directly, so don't add description, return just the text`, //` . Format it like this: <txt_1><translation><txt_1> . `,
       apiKey,
     });
 

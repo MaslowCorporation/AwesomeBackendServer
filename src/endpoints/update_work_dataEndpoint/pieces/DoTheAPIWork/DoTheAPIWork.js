@@ -16,7 +16,7 @@ export async function DoTheAPIWork(req) {
   const apiKey = process.env.OPENAI_API_KEY;
 
   // Specify the destination subfolder where we store the files of this client
-  const uploadPath = GetFolderForClientData(req);
+  const uploadPath = await GetFolderForClientData(req);
 
   const photoFileInfo = req.file;
 

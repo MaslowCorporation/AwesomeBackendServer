@@ -1,7 +1,19 @@
-export function GetFolderForClientData(req) {
+import { OSWork } from "../OSWork/OSWork.js";
+import fs from "fs";
+
+export async function GetFolderForClientData(req) {
   const { apiKey } = req.query;
 
-  const uploadPath = `./uploads/files/${apiKey || "trashcan"}`; // Specify the destination subfolder
+  const uploadPathUnix = `/tmp/files/${apiKey || "trashcan"}`; 
+  const uploadPathWindows = `./files/${apiKey || "trashcan"}`; 
+
+  const uploadPath = await OSWork({
+    onWindows: () => uploadPathWindows,
+    onLinux: () => uploadPathUnix,
+    onMacOS: () => uploadPathUnix,
+  });
+  
+
   return uploadPath;
 }
 

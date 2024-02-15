@@ -52,6 +52,9 @@ typings/
 
 # Optional eslint cache
 .eslintcache
+.env
+
+
 
 # Microbundle cache
 .rpt2_cache/
@@ -104,3 +107,10 @@ dist
 .DS_Store
 lib
 *.tgz
+
+
+RedisWin10/dumb.rdb
+
+dump.rdb
+
+package-lock.json

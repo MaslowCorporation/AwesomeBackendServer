@@ -1,6 +1,5 @@
 import 'dotenv/config';
 
-
 // Utilities and stuff
 import express from "express";
 import stripe from "stripe";
@@ -11,6 +10,7 @@ import { InitAppStrings } from "./src/stringRepos/AppStrings/AppStrings.js";
 
 import { InitRateLimiter } from './src/services/InitRateLimiter/InitRateLimiter.js';
 
+
 // Starterpack API endpoints
 import { myAPIEndpoint } from "./src/endpoints/myAPIEndpoint/myAPIEndpoint.js";
 import { checkoutEndpoint } from "./src/endpoints/checkoutEndpoint/checkoutEndpoint.js";
@@ -19,6 +19,9 @@ import { checkoutCreditsEndpoint } from './src/endpoints/checkoutCreditsEndpoint
 import { update_work_dataEndpoint } from "./src/endpoints/update_work_dataEndpoint/update_work_dataEndpoint.js";
 import { get_work_statusEndpoint } from "./src/endpoints/get_work_statusEndpoint/get_work_statusEndpoint.js";
 import { get_api_client_infoEndpoint } from "./src/endpoints/get_api_client_infoEndpoint/get_api_client_infoEndpoint.js";
+import { the_king_has_talkedEndpoint } from "./src/endpoints/the_king_has_talkedEndpoint/the_king_has_talkedEndpoint.js";
+import { google_loginEndpoint } from "./src/endpoints/google_loginEndpoint/google_loginEndpoint.js";
+import { get_google_api_keyEndpoint } from "./src/endpoints/get_google_api_keyEndpoint/get_google_api_keyEndpoint.js";
 
 
 
@@ -26,7 +29,6 @@ import { get_api_client_infoEndpoint } from "./src/endpoints/get_api_client_info
 // npx maslow add-api-endpoint
 // DON'T TOUCH the comment below !!!
 /* PLOP_INJECT_IMPORT */
-
 
 
 /**
@@ -67,7 +69,7 @@ InitAppStrings();
 /**
  * 
  * Uncomment this code if you want to monetize your API with Stripe
- *
+ */
 // le secret key du compte stripe, dispo sections
 // developers du dashboard stripe
 // https://dashboard.stripe.com/test/apikeys
@@ -77,12 +79,23 @@ const stripe_secret_key = process.env.STRIPE_SECRET_KEY;
 // nécessaire pour pouvoir effectuer des requetes payantes
 const stripeInstance = new stripe(stripe_secret_key);
 
-*/
 
 // Your own endpoints that you created using the command:
 // npx maslow add-api-endpoint
 // DON'T TOUCH the comment below !!!
 /* PLOP_INJECT_ENDPOINT_INIT */
+
+// crée un endpoint nommé the_king_has_talked
+// reachable via http://localhost:<apiPort>/the_king_has_talked
+the_king_has_talkedEndpoint(app);
+
+// crée un endpoint nommé google_login
+// reachable via http://localhost:<apiPort>/google_login
+google_loginEndpoint(app);
+
+// crée un endpoint nommé get_google_api_key
+// reachable via http://localhost:<apiPort>/get_google_api_key
+get_google_api_keyEndpoint(app);
 
 
 
@@ -97,9 +110,6 @@ const stripeInstance = new stripe(stripe_secret_key);
  * checkoutEndpoint, 
  * webhookEndpoint,
  * checkoutCreditsEndpoint
- * get_api_client_infoEndpoint
- * update_work_dataEndpoint
- * get_work_statusEndpoint
  * 
  * endpoints if you want to monetize your server
  **/
@@ -109,7 +119,7 @@ const stripeInstance = new stripe(stripe_secret_key);
 // de souscrire à notre API, puis de recevoir 
 // un email de confirmation via le webhookEndpoint
 // reachable via http://localhost:<apiPort>/checkout
-//checkoutEndpoint(app, stripeInstance);
+checkoutEndpoint(app, stripeInstance);
 
 // un webhook est un endpoint dans notre API,
 // qui recoit des données venant de stripe,
@@ -120,7 +130,7 @@ const stripeInstance = new stripe(stripe_secret_key);
 // a recupérer les données d'abonnés tout juste abonnés.
 // ici s'implémente de quoi fournir à l'user sa clé API
 // (via email/phone)
-//webhookEndpoint(app, stripeInstance);
+webhookEndpoint(app, stripeInstance);
 
 
 // crée un endpoint de type POST, pour paiements Stripe,
@@ -128,11 +138,17 @@ const stripeInstance = new stripe(stripe_secret_key);
 // de souscrire à notre API, puis de recevoir 
 // un email de confirmation via le webhookEndpoint
 // reachable via http://localhost:<apiPort>/checkout<QTY_CREDITS>
-//checkoutCreditsEndpoint(app, stripeInstance, 5000);
+checkoutCreditsEndpoint(app, stripeInstance, 5000);
 
 // crée un endpoint nommé get_api_client_info
 // reachable via http://localhost:<apiPort>/get_api_client_info
-//get_api_client_infoEndpoint(app, stripeInstance);
+get_api_client_infoEndpoint(app, stripeInstance);
+
+// this is a dummy GET API endpoint for testing purposes.
+// crée un endpoint nommé myAPI (GET)
+// reachable via GET http://localhost:<apiPort>/myAPI
+// delete or comment this myAPIEndpoint(app); line when in production 
+myAPIEndpoint(app);
 
 // crée un endpoint nommé update_work_data
 // reachable via http://localhost:<apiPort>/update_work_data
@@ -140,13 +156,7 @@ const stripeInstance = new stripe(stripe_secret_key);
 
 // crée un endpoint nommé get_work_status
 // reachable via http://localhost:<apiPort>/get_work_status
-//get_work_statusEndpoint(app, stripeInstance);
-
-// this is a dummy GET API endpoint for testing purposes.
-// crée un endpoint nommé myAPI (GET)
-// reachable via GET http://localhost:<apiPort>/myAPI
-// delete or comment this myAPIEndpoint(app); line when in production 
-myAPIEndpoint(app);
+get_work_statusEndpoint(app, stripeInstance);
 
 // exécute l'appli express
 startServer(app);

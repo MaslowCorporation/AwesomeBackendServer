@@ -2,10 +2,15 @@ import { generateAPIKey } from "../../../../services/GenerateAPIKey/GenerateAPIK
 import { GetUniqueID } from "../../../../services/GetUniqueID/GetUniqueID.js";
 
 export async function _checkoutEndpoint(stripe, req, res) {
+  
+  
   // baby api key
   const babyAPIKey = GetUniqueID(16);
 
-  const { accessToken, idToken, firebase_uid, email, username, username_photo } = req.body;
+  const { google_user_uid, email, username, username_photo } = req.body;
+
+  const google_uid_short_hashed = await generateAPIKey(google_user_uid);
+  const google_uid_short = google_uid_short_hashed?.apiKey;
 
   const { apiKey, hashedAPIKey } = await generateAPIKey(babyAPIKey);
 
@@ -59,6 +64,12 @@ export async function _checkoutEndpoint(stripe, req, res) {
       invoice_data: {
         description: `Thank you for subscribing ! Welcome aboard ! Your API Key: ${apiKey}.`,
       }
+    },
+
+    // some metadata for the webhook
+    metadata: {
+      ...req.body,
+      google_user_uid: google_uid_short,
     },
 
   });

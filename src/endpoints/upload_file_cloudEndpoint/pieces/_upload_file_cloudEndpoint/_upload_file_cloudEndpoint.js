@@ -8,6 +8,8 @@ import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDat
 import { Constants } from "../../../../AppConstants/Constants.js";
 
 export async function _upload_file_cloudEndpoint(req, res, stripe) {
+
+
   // the API Key present in the 'apiKey' query parameter.
   // of the request URL.
   const { apiKey } = req.query;
@@ -30,7 +32,7 @@ export async function _upload_file_cloudEndpoint(req, res, stripe) {
   const hashedAPIKey = hashAPIKey(apiKey);
 
   // get the API client data, from his Hashed API Key
-  
+
   const APIClientData = await GetFirestoreDocument({
     collectionName: "APIKeys",
     documentId: hashedAPIKey,

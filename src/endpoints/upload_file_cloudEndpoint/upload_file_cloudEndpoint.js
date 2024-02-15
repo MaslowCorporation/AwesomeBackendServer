@@ -1,10 +1,14 @@
 import { _upload_file_cloudEndpoint } from "./pieces/_upload_file_cloudEndpoint/_upload_file_cloudEndpoint.js";
 
 // Uncomment this if you want to upload a file 
-import { SetupMulterMemory } from "./pieces/SetupMulter/SetupMulter.js";
+import { SetupMulter, SetupMulterMemory } from "./pieces/SetupMulter/SetupMulter.js";
 
 // Set up Multer storage using diskStorage
 // Uncomment this if you want to upload a file 
+//const upload = SetupMulter();
+
+// Setup Multer in memory, for environments like Heroku where
+// the file system is not available
 const upload = SetupMulterMemory();
 
 // Create an endpoint named upload_file_cloud
