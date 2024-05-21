@@ -32,10 +32,8 @@ import { get_google_api_keyEndpoint } from "./src/endpoints/get_google_api_keyEn
 
 
 /**
- * OYé OYé CITOYENS !!
- *
- * Cette humble API nommée maslow-gpt-api-v2,
- * à été construite avec l'aide de:
+ * 
+ * This humble server was created thanks to this video from Fireship
  *
  * https://www.youtube.com/watch?v=MbqSMgMAzxU
  *
