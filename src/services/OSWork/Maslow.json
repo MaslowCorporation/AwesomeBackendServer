@@ -1,0 +1,9 @@
+{
+  "question": "Give me a Node.js function called OSSpecificWork(onWindows, onLinux, onMacOS)\n\nThis function returns onWindows() if the code runs on windows, etc... \n\nalso, use import/export syntax",
+  "questionPath": "question.txt",
+  "answer": {
+    "codePart": "// osspecificwork.js\n\nexport function OSSpecificWork(onWindows, onLinux, onMacOS) {\n  const platform = process.platform;\n  \n  switch (platform) {\n    case 'win32':\n      return onWindows();\n    case 'linux':\n      return onLinux();\n    case 'darwin':\n      return onMacOS();\n    default:\n      throw new Error('Unsupported platform');\n  }\n}\n",
+    "answer": "```javascript\n// osspecificwork.js\n\nexport function OSSpecificWork(onWindows, onLinux, onMacOS) {\n  const platform = process.platform;\n  \n  switch (platform) {\n    case 'win32':\n      return onWindows();\n    case 'linux':\n      return onLinux();\n    case 'darwin':\n      return onMacOS();\n    default:\n      throw new Error('Unsupported platform');\n  }\n}\n```\n\nTo use this function in another file:\n\n```javascript\n// index.js\n\nimport { OSSpecificWork } from './osspecificwork.js';\n\nfunction onWindows() {\n  console.log('Running on Windows');\n}\n\nfunction onLinux() {\n  console.log('Running on Linux');\n}\n\nfunction onMacOS() {\n  console.log('Running on macOS');\n}\n\nOSSpecificWork(onWindows, onLinux, onMacOS);\n```"
+  },
+  "codeFilePath": "OSWork.js"
+}

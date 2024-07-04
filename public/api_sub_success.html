@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Merienda&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="assets/love.png" type="image/x-icon">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #e6ffe6;
+            text-align: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px; /* Set a maximum width for better readability on larger screens */
+            width: 90%; /* Use a percentage to adapt to different screen sizes */
+            margin: auto; /* Center the container horizontally */
+        }
+
+        .icon {
+            font-size: 48px;
+            color: #00cc00;
+        }
+
+        #apiKeyText {
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        #copyButton {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #00cc00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            /* Adjust styles for screens with a maximum width of 600 pixels */
+            .icon {
+                font-size: 36px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            #apiKeyText {
+                font-size: 16px;
+            }
+
+            #copyButton {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="icon">&#10084;&#65039;</div>
+        <h1>Welcome to a new world, adventurer !</h1>
+        <p>The API key below is a very important asset, in this adventure, so copy/paste it, and store it somewhere safe
+            and warm.</p>
+
+        <div id="apiKeyText"></div>
+        <button id="copyButton">Copy API Key</button>
+
+        <p>Thank you !</p>
+
+        <!-- Audio Element for Click Sound -->
+        <audio id="clickSound">
+            <source src="assets/mouse_click.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <script>
+            // Function to extract 'g' query parameter from URL
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Function to hash the 'g' query parameter using SHA-256
+            async function hashApiKey(apiKey) {
+                const msgUint8 = new TextEncoder().encode(apiKey);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex;
+            }
+
+            // Function to copy the API key to clipboard
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+
+            // Retrieve the 'g' query parameter and hash it on page load
+            window.onload = async function () {
+                const gParam = getQueryParam('g');
+                if (gParam) {
+                    const hashedKey = await hashApiKey(gParam);
+                    const apiKeyText = document.getElementById('apiKeyText');
+                    //apiKeyText.textContent = `${hashedKey}`;
+
+                    const copyButton = document.getElementById('copyButton');
+                    const clickSound = document.getElementById('clickSound');
+
+                    copyButton.addEventListener('click', function () {
+                        copyToClipboard(hashedKey);
+                        clickSound.play(); // Play click sound
+                        copyButton.textContent = "API Key copied successfully !"
+                    });
+                }
+            };
+        </script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+Add the following fixes to this code:
+
+// Get all documents
+export async function GetAllDatabaseDocuments({ db, tableName }) {
+  try {
+    let statement = await db.all(`SELECT * FROM ${tableName}`);
+    return statement;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+// Delete all documents
+export async function DeleteAllDatabaseDocuments({ db, tableName }) {
+  try {
+    let statement = await db.run(`DELETE FROM ${tableName}`);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+
+Fixes_should_be_here
+  

@@ -1,0 +1,22 @@
+Add the following fixes to this code:
+
+// osspecificwork.js
+
+export function OSSpecificWork(onWindows, onLinux, onMacOS) {
+  const platform = process.platform;
+  
+  switch (platform) {
+    case 'win32':
+      return onWindows();
+    case 'linux':
+      return onLinux();
+    case 'darwin':
+      return onMacOS();
+    default:
+      throw new Error('Unsupported platform');
+  }
+}
+
+
+Fixes_should_be_here
+  

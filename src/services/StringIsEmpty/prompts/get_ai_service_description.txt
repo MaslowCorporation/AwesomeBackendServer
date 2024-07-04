@@ -1,0 +1,3 @@
+Retourne true sistr est null, ou vide.vide = Ne contient que des espaces, des tabs, des newlines, etc...
+
+Retourne false si str contient des charactÃ¨res autres que du vide.
