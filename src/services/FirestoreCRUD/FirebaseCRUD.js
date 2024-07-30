@@ -153,7 +153,7 @@ export async function GetCollection({ collectionName }) {
       return null;
     }
   } catch (error) {
-    console.error("Error getting collection:", error);
+    //console.error("Error getting collection:", error);
 
     return null;
   }

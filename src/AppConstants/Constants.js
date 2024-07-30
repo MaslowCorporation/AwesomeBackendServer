@@ -32,6 +32,8 @@ const Constants = {
   // ADD_NEW_AI_MODEL
   // prices per 1000 tokens
   modelsPrices: {
+    "text-embedding-ada-002": 0.0001, // for 1k tokens
+    "tts-1": 0.02, // for 1k characters
     "gpt-4": {
       input: 0.03,
       output: 0.06

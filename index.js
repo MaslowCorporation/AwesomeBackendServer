@@ -31,8 +31,9 @@ import { get_google_api_keyEndpoint } from "./src/endpoints/get_google_api_keyEn
 
 
 
+
 /**
- * 
+ *
  * This humble server was created thanks to this video from Fireship
  *
  * https://www.youtube.com/watch?v=MbqSMgMAzxU
@@ -45,6 +46,7 @@ export const apiPort = 8080;
 // permet de créer des endpoints
 // pour notre sainte API
 export const app = express();
+
 
 // initialize the rate limiter
 InitRateLimiter(app);
@@ -82,6 +84,7 @@ const stripeInstance = new stripe(stripe_secret_key);
 // DON'T TOUCH the comment below !!!
 /* PLOP_INJECT_ENDPOINT_INIT */
 
+
 // crée un endpoint nommé the_king_has_talked
 // reachable via http://localhost:<apiPort>/the_king_has_talked
 the_king_has_talkedEndpoint(app);
@@ -93,6 +96,7 @@ google_loginEndpoint(app);
 // crée un endpoint nommé get_google_api_key
 // reachable via http://localhost:<apiPort>/get_google_api_key
 get_google_api_keyEndpoint(app);
+
 
 /** 
  * 
@@ -154,5 +158,3 @@ myAPIEndpoint(app);
 
 // exécute l'appli express
 startServer(app);
-
-

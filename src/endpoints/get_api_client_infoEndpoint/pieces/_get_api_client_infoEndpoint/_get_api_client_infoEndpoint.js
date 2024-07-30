@@ -5,6 +5,7 @@ import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDat
 import { DoTheAPIWork } from "../DoTheAPIWork/DoTheAPIWork.js";
 import { UpdateAPIUsage } from "../UpdateAPIUsage/UpdateAPIUsage.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
+import { GetAPIClientData } from "../../../../services/GetAPIClientsPeriodically/GetAPIClientsPeriodically.js";
 
 export async function _get_api_client_infoEndpoint(req, res, stripe) {
 
@@ -30,10 +31,7 @@ export async function _get_api_client_infoEndpoint(req, res, stripe) {
   const hashedAPIKey = hashAPIKey(apiKey);
 
   // get the API client data, from his Hashed API Key
-  const APIClientData = await GetFirestoreDocument({
-    collectionName: "APIKeys",
-    documentId: hashedAPIKey,
-  });
+  const APIClientData = GetAPIClientData(hashedAPIKey);
 
 
 

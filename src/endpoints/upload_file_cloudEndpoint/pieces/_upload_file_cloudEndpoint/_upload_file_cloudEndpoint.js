@@ -6,6 +6,7 @@ import { upload_file_cloudLongWork } from "../DoTheAPIWork/pieces/upload_file_cl
 
 import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
+import { GetAPIClientData } from "../../../../services/GetAPIClientsPeriodically/GetAPIClientsPeriodically.js";
 
 export async function _upload_file_cloudEndpoint(req, res, stripe) {
 
@@ -34,10 +35,7 @@ export async function _upload_file_cloudEndpoint(req, res, stripe) {
 
   // get the API client data, from his Hashed API Key
 
-  const APIClientData = await GetFirestoreDocument({
-    collectionName: "APIKeys",
-    documentId: hashedAPIKey,
-  });
+  const APIClientData = GetAPIClientData(hashedAPIKey);
 
 
 

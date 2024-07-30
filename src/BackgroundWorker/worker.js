@@ -5,6 +5,12 @@ import throng from 'throng';
 
 // PLOP_INJECT_ENDPOINT_JOB_IMPORT
 
+import { generate_rag_codeJob } from '../endpoints/generate_rag_codeEndpoint/pieces/DoTheAPIWork/pieces/generate_rag_codeJob.js';
+
+import { load_code_folderJob } from '../endpoints/load_code_folderEndpoint/pieces/DoTheAPIWork/pieces/load_code_folderJob.js';
+
+import { generate_audio_from_txtJob } from '../endpoints/generate_audio_from_txtEndpoint/pieces/DoTheAPIWork/pieces/generate_audio_from_txtJob.js';
+
 import { the_king_has_talkedJob } from '../endpoints/the_king_has_talkedEndpoint/pieces/DoTheAPIWork/pieces/the_king_has_talkedJob.js';
 
 import { google_loginJob } from '../endpoints/google_loginEndpoint/pieces/DoTheAPIWork/pieces/google_loginJob.js';
@@ -73,6 +79,18 @@ function start() {
 
     switch (job.data.api_endpoint_name) {
       // PLOP_INJECT_ENDPOINT_JOB_CASE
+      case "generate_rag_code":
+        // do something
+        output = generate_rag_codeJob(job);
+        break;
+      case "load_code_folder":
+        // do something
+        output = load_code_folderJob(job);
+        break;
+      case "generate_audio_from_txt":
+        // do something
+        output = generate_audio_from_txtJob(job);
+        break;
       case "the_king_has_talked":
         // do something
         output = the_king_has_talkedJob(job);
@@ -128,7 +146,8 @@ function start() {
 
     const graal = await output;
 
-    console.log(`Job ${job.id} ran through successfully ! Here's the output: ${JSON.stringify(graal, null, 2)}`);
+    console.log(`Job ${job.id} ran through successfully !`);
+    // console.log(`Here's the output: ${JSON.stringify(graal, null, 2)}`);
 
     return output;
   });

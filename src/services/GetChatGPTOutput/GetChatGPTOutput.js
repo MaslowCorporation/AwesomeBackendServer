@@ -19,19 +19,9 @@ async function GetChatGPTOutput({
 }) {
   try {
 
-
     const model_max_tok = Constants.modelsMaxTokens[model_chosen];
 
-    const prompt_token_length = GetPromptTokensLength(model_chosen, prompt);
-    const availableTokens = model_max_tok - prompt_token_length - 100;
-
-    print && console.log(i18next.t("xnPkyJUf") + ` ${model_chosen}`);
-    print && console.log(
-      i18next.t("xJLDlRfb") +
-      ` ${!isNaN(availableTokens) ? availableTokens : "..."}`
-    );
-
-
+    const availableTokens = Math.floor((2 / 3) * model_max_tok);
 
     const outputData = await GetTextFromCompletion({
       apiKey,
@@ -43,15 +33,11 @@ async function GetChatGPTOutput({
       print,
     });
 
-
-
     onSuccess && onSuccess(outputData);
 
     return outputData;
 
   } catch (error) {
-
-
     console.log(`A problem occurred while trying to complete a prompt: ${JSON.stringify(error, null, 2)}`)
 
     if (error.response) {
@@ -97,18 +83,14 @@ async function GetChatCompletion({
   availableTokens,
 }) {
 
-
   let result = "";
-  const inputTokens = GetPromptTokensLength(model_chosen, prompt);
-
-
-
-  // Print model information if enabled
-  print && console.log(`Model chosen: ${model_chosen}`);
 
   const openai = new OpenAI({
     apiKey,
   });
+
+
+  let latest_chunk;
 
   // Create a chat-based completion request
   const stream = await openai.chat.completions.create({
@@ -116,23 +98,28 @@ async function GetChatCompletion({
     max_tokens: availableTokens,
     messages: [{ role: 'user', content: prompt }],
     stream: true,
+    stream_options: { "include_usage": true }
   });
 
+
+
   for await (const chunk of stream) {
-
-
     const chunkData = chunk.choices[0]?.delta?.content || '';
 
     result += chunkData;
 
-    onProgress && onProgress({ chunk: chunkData, inputTokens })
+    onProgress && onProgress({ chunk: chunkData })
+
+    latest_chunk = chunk;
   }
 
-
-
-  const outputTokens = GetPromptTokensLength(model_chosen, result);
+  const inputTokens = latest_chunk.usage.prompt_tokens;
+  const outputTokens = latest_chunk.usage.completion_tokens;
 
   print && console.log(`Chat Completion Answer: ${result}`);
+  print && console.log(`Model chosen: ${model_chosen}`);
+  print && console.log("Input tokens: " + inputTokens);
+  print && console.log("Output tokens: " + outputTokens);
 
   return { result, inputTokens, outputTokens }
 

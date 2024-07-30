@@ -6,6 +6,7 @@ import { get_gpt_funcLongWork } from "../DoTheAPIWork/pieces/get_gpt_funcLongWor
 
 import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
+import { GetAPIClientData } from "../../../../services/GetAPIClientsPeriodically/GetAPIClientsPeriodically.js";
 
 export async function _get_gpt_funcEndpoint(req, res, stripe) {
   // the API Key present in the 'apiKey' query parameter.
@@ -32,10 +33,7 @@ export async function _get_gpt_funcEndpoint(req, res, stripe) {
 
   // get the API client data, from his Hashed API Key
 
-  const APIClientData = await GetFirestoreDocument({
-    collectionName: "APIKeys",
-    documentId: hashedAPIKey,
-  });
+  const APIClientData = GetAPIClientData(hashedAPIKey);
 
 
 

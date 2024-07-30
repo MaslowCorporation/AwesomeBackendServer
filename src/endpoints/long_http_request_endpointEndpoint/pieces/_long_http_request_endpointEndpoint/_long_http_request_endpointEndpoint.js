@@ -5,6 +5,7 @@ import { long_http_request_endpointQuickWork } from "../DoTheAPIWork/pieces/long
 import { long_http_request_endpointLongWork } from "../DoTheAPIWork/pieces/long_http_request_endpointLongWork.js";
 import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
+import { GetAPIClientData } from "../../../../services/GetAPIClientsPeriodically/GetAPIClientsPeriodically.js";
 
 export async function _long_http_request_endpointEndpoint(req, res, stripe) {
   // the API Key present in the 'apiKey' query parameter.
@@ -31,10 +32,7 @@ export async function _long_http_request_endpointEndpoint(req, res, stripe) {
 
   // get the API client data, from his Hashed API Key
 
-  const APIClientData = await GetFirestoreDocument({
-    collectionName: "APIKeys",
-    documentId: hashedAPIKey,
-  });
+  const APIClientData = GetAPIClientData(hashedAPIKey);
 
 
 

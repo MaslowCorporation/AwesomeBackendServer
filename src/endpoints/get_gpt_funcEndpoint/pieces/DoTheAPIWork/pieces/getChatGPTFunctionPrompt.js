@@ -34,6 +34,7 @@ Here's a brief summary of ${functionName}: ${functionPurpose} .
 Here's a detailed description of ${functionName}: ${functionReturnValue} . 
 
 Give me an implementation of ${functionName}. Add lots of comments so the code is easier to understand.
+Give me everything inside one block of code only.
 `.replace(/(\r\n|\n|\r)/gm, "");
 }
 export { getChatGPTFunctionPrompt };

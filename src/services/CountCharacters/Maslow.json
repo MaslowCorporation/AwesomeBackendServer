@@ -1,0 +1,9 @@
+{
+  "question": "Give me a node.js function called CountCharacters(str) that return the number of characters in str (all the characters except the empty characters)",
+  "questionPath": "question.txt",
+  "answer": {
+    "codePart": "function CountCharacters(str) { \n    return str.replace(/\\s/g, '').length; \n}\n",
+    "answer": "```javascript\nfunction CountCharacters(str) { \n    return str.replace(/\\s/g, '').length; \n}\n```"
+  },
+  "codeFilePath": "CountCharacters.js"
+}

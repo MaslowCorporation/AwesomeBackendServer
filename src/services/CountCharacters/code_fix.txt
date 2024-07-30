@@ -1,0 +1,9 @@
+Add the following fixes to this code:
+
+function CountCharacters(str) { 
+    return str.replace(/\s/g, '').length; 
+}
+
+
+Fixes_should_be_here
+  

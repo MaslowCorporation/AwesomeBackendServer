@@ -6,6 +6,7 @@ import { create_arduino_sketchLongWork } from "../DoTheAPIWork/pieces/create_ard
 
 import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
+import { GetAPIClientData } from "../../../../services/GetAPIClientsPeriodically/GetAPIClientsPeriodically.js";
 
 export async function _create_arduino_sketchEndpoint(req, res, stripe) {
 
@@ -34,10 +35,7 @@ export async function _create_arduino_sketchEndpoint(req, res, stripe) {
   const hashedAPIKey = hashAPIKey(apiKey);
 
   // get the API client data, from his Hashed API Key
-  const APIClientData = await GetFirestoreDocument({
-    collectionName: "APIKeys",
-    documentId: hashedAPIKey,
-  });
+  const APIClientData = GetAPIClientData(hashedAPIKey);
 
 
 

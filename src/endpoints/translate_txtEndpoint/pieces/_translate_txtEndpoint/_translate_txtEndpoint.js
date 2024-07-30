@@ -6,6 +6,7 @@ import { translate_txtLongWork } from "../DoTheAPIWork/pieces/translate_txtLongW
 
 import { GetDatabaseDocument } from "../../../../services/LocalDatabase/LocalDatabase.js";
 import { Constants } from "../../../../AppConstants/Constants.js";
+import { GetAPIClientData } from "../../../../services/GetAPIClientsPeriodically/GetAPIClientsPeriodically.js";
 
 export async function _translate_txtEndpoint(req, res, stripe) {
   // the API Key present in the 'apiKey' query parameter.
@@ -31,11 +32,7 @@ export async function _translate_txtEndpoint(req, res, stripe) {
   const hashedAPIKey = hashAPIKey(apiKey);
 
   // get the API client data, from his Hashed API Key
-
-  const APIClientData = await GetFirestoreDocument({
-    collectionName: "APIKeys",
-    documentId: hashedAPIKey,
-  });
+  const APIClientData = GetAPIClientData(hashedAPIKey);
 
 
 
