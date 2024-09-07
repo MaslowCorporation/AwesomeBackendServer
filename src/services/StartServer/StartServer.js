@@ -12,7 +12,7 @@ export async function startServer(app) {
 
     // periodically et the API client data, so the Cloud Firestore
     // quota don't get blown up by some stupid DDOS or some infinite loop
-    GetAPIClientsPeriodically();
+    // GetAPIClientsPeriodically();
   });
 
 }
